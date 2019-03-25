@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">wallpaper</string>
+    <string name="titlebar_more">more</string>
+    <string name="titlebar_text">A WallPic</string>
+    <string name="titlebar_search">Search</string>
+    <string name="bottombar_botton0">botton0</string>
+    <string name="bottombar_botton1">botton1</string>
+    <string name="bottombar_botton2">botton2</string>
+    <string name="bottombar_mine">mine</string>
+    <string name="the_image">the_image</string>
 </resources>
