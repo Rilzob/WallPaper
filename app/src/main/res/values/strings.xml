@@ -8,4 +8,6 @@
     <string name="bottombar_botton2">botton2</string>
     <string name="bottombar_mine">mine</string>
     <string name="the_image">the_image</string>
+    <string name="nav_meun_item_update">auto update</string>
+    <string name="title_activity_search">search</string>
 </resources>
