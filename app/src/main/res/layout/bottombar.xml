@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:background="@color/white"
+              android:padding="5dp"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
-    <Button
+    <ImageButton
             android:id="@+id/bottom_botton0"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -11,10 +13,12 @@
             android:layout_gravity="center"
             android:layout_margin="5dp"
             android:gravity="center"
+            android:src="@drawable/bing_normal"
+            android:background="@color/white"
             android:text="@string/bottombar_botton0"
     />
 
-    <Button
+    <ImageButton
             android:id="@+id/bottom_botton1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -22,10 +26,12 @@
             android:layout_gravity="center"
             android:layout_margin="5dp"
             android:gravity="center"
+            android:src="@drawable/ng_normal"
+            android:background="@color/white"
             android:text="@string/bottombar_botton1"
     />
 
-    <Button
+    <ImageButton
             android:id="@+id/bottom_botton2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -33,10 +39,12 @@
             android:layout_gravity="center"
             android:layout_margin="5dp"
             android:gravity="center"
+            android:src="@drawable/nasa_normal"
+            android:background="@color/white"
             android:text="@string/bottombar_botton2"
     />
 
-    <Button
+    <ImageButton
             android:id="@+id/bottom_mine"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -44,6 +52,8 @@
             android:layout_gravity="center"
             android:layout_margin="5dp"
             android:gravity="center"
+            android:src="@drawable/user"
+            android:background="@color/white"
             android:text="@string/bottombar_mine"
     />
 
