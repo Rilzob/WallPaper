@@ -40,6 +40,8 @@
             android:layout_margin="5dp"
             android:gravity="center"
             android:src="@drawable/nasa_normal"
+            android:scaleY="1.22"
+            android:scaleX="1.22"
             android:background="@color/white"
             android:text="@string/bottombar_botton2"
     />
