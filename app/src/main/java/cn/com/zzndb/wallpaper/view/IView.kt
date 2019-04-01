@@ -7,4 +7,6 @@ import android.widget.ImageView
  */
 interface IView {
     fun showImage(view: ImageView)
+    fun getHeight(): Int
+    fun getWidth(): Int
 }

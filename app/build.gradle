@@ -39,9 +39,11 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$support_version"
     implementation "org.jetbrains.anko:anko-common:$anko_version"  // add kotlin
     implementation "org.jetbrains.anko:anko-sqlite:$anko_version"  // anko
-    implementation "com.google.code.gson:gson:2.8.5" // add gson for json analyze
+    implementation "com.google.code.gson:gson:$gson_version" // add gson for json analyze
     implementation "com.squareup.picasso:picasso:$picasso_version" // for image load
     implementation "com.android.support:design:$support_version" // for navigation view
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version" // for http request
+    // please consider add implementation right above this comment and left the usage comment
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
