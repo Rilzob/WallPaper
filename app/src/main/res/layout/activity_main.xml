@@ -3,7 +3,8 @@
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- main content view -->
     <LinearLayout
@@ -39,11 +40,11 @@
     <!-- the navigation drawer -->
     <android.support.design.widget.NavigationView
             android:id="@+id/nav_view"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:maxWidth="280dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            app:menu="@menu/nav_menu"
-            app:headerLayout="@layout/nav_menu_layout"
-            />
+            app:headerLayout="@layout/nav_header_upswitch"
+            app:menu="@menu/nav_menu" />
 
 </android.support.v4.widget.DrawerLayout>

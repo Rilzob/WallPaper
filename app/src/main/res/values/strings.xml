@@ -10,4 +10,6 @@
     <string name="the_image">the_image</string>
     <string name="nav_meun_item_update">auto update</string>
     <string name="title_activity_search">search</string>
+    <string name="auto_update">自动更新壁纸</string>
+    <string name="more">更多</string>
 </resources>
