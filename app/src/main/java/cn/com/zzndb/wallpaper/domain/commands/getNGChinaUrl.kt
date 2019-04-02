@@ -8,15 +8,23 @@ class getNGChinaUrl {
 
     val url: String
         get() {
-            val doc_old:Document = Jsoup.connect(NGChinaUrl).get()
-            val element_set = doc_old.select("a[class=imgs]").attr("href")
+            val doc_old:Document = Jsoup.connect(NGChinaUrl)
+                    .get()
+            val element_set = doc_old
+                    .select("a[class=imgs]")
+                    .attr("href")
 
             val new_url = "http://www.ngchina.com.cn" + element_set.toString()
-            val doc_new: Document = Jsoup.connect(new_url).get()
-            val picture_url = doc_new.select("a[href$=###]").select("img").attr("src").toString()
+            val doc_new: Document = Jsoup
+                    .connect(new_url)
+                    .get()
+            val picture_url = doc_new.select("a[href$=###]")
+                    .select("img")
+                    .attr("src")
+                    .toString()
 
-//            println("图片url:")
-//            println(picture_url)
+            println("图片url:")
+            println(picture_url)
 
             return picture_url
         }
