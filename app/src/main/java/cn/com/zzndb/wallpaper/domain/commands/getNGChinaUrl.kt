@@ -10,11 +10,11 @@ class getNGChinaUrl {
         get() {
             val doc_old:Document = Jsoup.connect(NGChinaUrl)
                     .get()
-            val element_set = doc_old
+            val element = doc_old
                     .select("a[class=imgs]")
                     .attr("href")
 
-            val new_url = "http://www.ngchina.com.cn" + element_set.toString()
+            val new_url = "http://www.ngchina.com.cn" + element.toString()
             val doc_new: Document = Jsoup
                     .connect(new_url)
                     .get()
