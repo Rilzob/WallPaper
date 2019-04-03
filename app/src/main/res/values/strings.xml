@@ -3,10 +3,10 @@
     <string name="titlebar_more">more</string>
     <string name="titlebar_text">A WallPic</string>
     <string name="titlebar_search">Search</string>
-    <string name="bottombar_botton0">botton0</string>
-    <string name="bottombar_botton1">botton1</string>
-    <string name="bottombar_botton2">botton2</string>
-    <string name="bottombar_mine">mine</string>
+    <string name="bing">Bing</string>
+    <string name="ng">Ng</string>
+    <string name="nasa">Nasa</string>
+    <string name="user">mine</string>
     <string name="the_image">the_image</string>
     <string name="nav_meun_item_update">auto update</string>
     <string name="title_activity_search">search</string>

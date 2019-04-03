@@ -1,62 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:background="@color/white"
-              android:layout_width="match_parent"
-              android:padding="2dp"
-              android:layout_height="wrap_content">
+<RadioGroup
+        android:id="@+id/bottom_bar"
+        android:padding="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ImageButton
-            android:id="@+id/bottom_botton0"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:gravity="center"
-            android:src="@drawable/bing_normal"
-            android:background="@color/white"
-            android:text="@string/bottombar_botton0"
+    <RadioButton
+            android:id="@+id/bottom_bing"
+            style="@style/bottom_bar"
+            android:drawableTop="@drawable/bottom_bing"
+            android:contentDescription="@string/bing"
     />
 
-    <ImageButton
-            android:id="@+id/bottom_botton1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:gravity="center"
-            android:src="@drawable/ng_normal"
-            android:background="@color/white"
-            android:text="@string/bottombar_botton1"
+    <RadioButton
+            android:id="@+id/bottom_ng"
+            style="@style/bottom_bar"
+            android:drawableTop="@drawable/bottom_ng"
+            android:contentDescription="@string/ng"
     />
 
-    <ImageButton
-            android:id="@+id/bottom_botton2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:gravity="center"
-            android:src="@drawable/nasa_normal"
+    <RadioButton
+            android:id="@+id/bottom_nasa"
+            style="@style/bottom_bar"
+            android:drawableTop="@drawable/bottom_nasa"
             android:scaleY="1.22"
             android:scaleX="1.22"
-            android:background="@color/white"
-            android:text="@string/bottombar_botton2"
+            android:contentDescription="@string/nasa"
     />
 
-    <ImageButton
+    <RadioButton
             android:id="@+id/bottom_mine"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:gravity="center"
-            android:src="@drawable/user"
-            android:background="@color/white"
-            android:text="@string/bottombar_mine"
+            style="@style/bottom_bar"
+            android:drawableTop="@drawable/user"
+            android:contentDescription="@string/user"
     />
 
-</LinearLayout>
+</RadioGroup>
+

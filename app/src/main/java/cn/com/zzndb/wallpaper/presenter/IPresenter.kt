@@ -6,6 +6,6 @@ import android.widget.ImageView
  * all interface here
  */
 interface IPresenter {
-    fun getImageUrl() : String
+    fun getImageUrl(str: String) : String
     fun loadImage(url: String, image: ImageView)
 }

@@ -15,10 +15,15 @@ import org.jetbrains.anko.uiThread
  */
 class PresenterImpl(val mView: IView) : IPresenter {
 
-    override fun getImageUrl() : String {
-//        return getBingUrl(mView.getWidth(), mView.getHeight()).url
-//        return getNGChinaUrl().url
-        return getNASAUrl().url
+    override fun getImageUrl(str: String) : String {
+        return when(str) {
+            "Bing" -> getBingUrl(mView.getWidth(), mView.getHeight(), mView).url
+            "Ng"   -> getNGChinaUrl().url
+            "Nasa" -> getNASAUrl().url
+            else -> {
+                "https://zzndb.com.cn/3.png"
+            }
+        }
     }
 
     override fun loadImage(url: String, image: ImageView) {
@@ -29,7 +34,6 @@ class PresenterImpl(val mView: IView) : IPresenter {
                     .resize(image.width, image.height)
                     .centerCrop()
                     .into(image)
-
             }
         }
     }
