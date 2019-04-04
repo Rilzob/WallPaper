@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
     private var sHeight: Int by Delegates.notNull()
     private var sWidth: Int by Delegates.notNull()
 
-    private val presenter = PresenterImpl(this)
+    private var presenter = PresenterImpl(this)
     private val mDrawerLayout: DrawerLayout? = null
 
     private var bottomRgGroup: RadioGroup? = null
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         bottomRgGroup = find(R.id.bottom_bar)
         bottomRgGroup!!.setOnCheckedChangeListener(this)
 
-        // choose bing default
+        // choose ~~bing~~ nasa default (to tmp escape the buggy switch. (( nasa first also buggy after processBar added, so change back
         bottombing = find(R.id.bottom_bing)
         bottombing!!.isChecked = true
 
@@ -68,8 +68,8 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         Log.d("test size get:", getHeight().toString() + "x" + getWidth().toString())
     }
 
-    override fun showImage(str: String ,view: ImageView) {
-        presenter.loadImage(presenter.getImageUrl(str), view)
+    override fun showImage(str: String ,view: ImageView, fView: ContentFragment) {
+        presenter.loadImage(presenter.getImageUrl(str), view, fView)
     }
 
     override fun getHeight(): Int = sHeight
@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
     }
 
     override fun showMes(str: String) {
-        Toast.makeText(this, str, Toast.LENGTH_LONG).show()
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
     }
 
     // like bottom clickListener

@@ -4,10 +4,13 @@ import android.widget.ImageView
 import cn.com.zzndb.wallpaper.domain.commands.getBingUrl
 import cn.com.zzndb.wallpaper.domain.commands.getNASAUrl
 import cn.com.zzndb.wallpaper.domain.commands.getNGChinaUrl
+import cn.com.zzndb.wallpaper.view.ContentFragment
 import cn.com.zzndb.wallpaper.view.IView
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import java.lang.Exception
 
 /**
  * the impliment of IPresenter
@@ -26,14 +29,25 @@ class PresenterImpl(val mView: IView) : IPresenter {
         }
     }
 
-    override fun loadImage(url: String, image: ImageView) {
+    override fun loadImage(url: String, image: ImageView, fView: ContentFragment) {
         doAsync {
             uiThread {
                 Picasso.get()
                     .load(url)
-                    .resize(image.width, image.height)
+                    .resize(fView.width(), fView.height())
                     .centerCrop()
-                    .into(image)
+                    .into(image, object :  Callback {
+                        override fun onError(e: Exception?) {
+                            mView.showMes("Picasso loading image failed!")
+                        }
+
+                        override fun onSuccess() {
+                            fView.showImageVIew()
+                            fView.hideProcessBar()
+                            mView.showMes(fView.width().toString() + "+" + fView.height().toString())
+                        }
+
+                    })
             }
         }
     }

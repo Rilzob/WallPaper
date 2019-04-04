@@ -10,13 +10,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/grey"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
             android:contentDescription="@string/the_image"/>
 
     <ProgressBar
             android:id="@+id/imageview_process"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:layout_height="match_parent"
+            android:scaleX="0.18"
+            android:scaleY="0.18"
+            android:visibility="visible"
             android:layout_centerInParent="true"
     />
 
