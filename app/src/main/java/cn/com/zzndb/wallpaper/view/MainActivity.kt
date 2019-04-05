@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
     private var bingFg: ContentFragment? = null
     private var ngFg: ContentFragment? = null
     private var nasaFg: ContentFragment? = null
-    private var mineFg: ContentFragment? = null
+    private var mineFg: MineFragment? = null
 
     private var fManager: FragmentManager? = null
 
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         bottomRgGroup = find(R.id.bottom_bar)
         bottomRgGroup!!.setOnCheckedChangeListener(this)
 
-        // choose ~~bing~~ nasa default (to tmp escape the buggy switch. (( nasa first also buggy after processBar added, so change back
+        // choose bing default
         bottombing = find(R.id.bottom_bing)
         bottombing!!.isChecked = true
 
@@ -87,7 +87,6 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
     }
 
     // like bottom clickListener
-    // TODO: learn how to fix the buggy switch, something wrong after nasa image load; add ProcessBar
     override fun onCheckedChanged(group: RadioGroup?, checkedId: Int) {
         val fTransaction : FragmentTransaction = fManager!!.beginTransaction()
         hideAllFragment(fTransaction)
@@ -119,7 +118,7 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
             }
             R.id.bottom_mine ->  {
                 if (mineFg == null) {
-                    mineFg = ContentFragment()
+                    mineFg = MineFragment()
                     Log.d("test mes", "new mineFg")
                     fTransaction.add(R.id.fg_content, mineFg!!)
                 } else {
@@ -130,10 +129,11 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         fTransaction.commit()
     }
 
+    // hide current fragment before switch
     private fun hideAllFragment(fragmentTransaction: FragmentTransaction) {
         if (bingFg != null) fragmentTransaction.hide(bingFg!!)
         if (ngFg   != null)   fragmentTransaction.hide(ngFg!!)
-        if (mineFg != null) fragmentTransaction.hide(mineFg!!)
+        if (nasaFg != null) fragmentTransaction.hide(nasaFg!!)
         if (mineFg != null) fragmentTransaction.hide(mineFg!!)
     }
 }

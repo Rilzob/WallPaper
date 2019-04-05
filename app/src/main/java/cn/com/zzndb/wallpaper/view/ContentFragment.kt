@@ -13,9 +13,11 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
 
 
+/**
+ * Image content fragment
+ */
 class ContentFragment : Fragment(), IFragmentView {
 
-    // TODO deal mine fragment
     private lateinit var image: ImageView
     private lateinit var mView: IView
     private var tStr: String = ""
