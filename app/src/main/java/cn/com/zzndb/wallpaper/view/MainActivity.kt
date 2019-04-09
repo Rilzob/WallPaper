@@ -1,16 +1,23 @@
 package cn.com.zzndb.wallpaper.view
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.util.Log
 import android.widget.*
-import cn.com.zzndb.wallpaper.R
+import cn.com.zzndb.wallpaper.domain.commands.ImageSaveUtils
+import cn.com.zzndb.wallpaper.domain.commands.test
+import cn.com.zzndb.wallpaper.domain.commands.test.REQUEST_EXTERNAL_STORAGE
 import cn.com.zzndb.wallpaper.presenter.PresenterImpl
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
 import kotlin.properties.Delegates
 
@@ -33,27 +40,27 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
     private var mineFg: ContentFragment? = null
 
     private var fManager: FragmentManager? = null
-
+    var context:Context=this
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(cn.com.zzndb.wallpaper.R.layout.activity_main)
         initView()
     }
 
     private fun initView() {
         // init view test
-        val mDrawerLayout = find(R.id.drawer_layout) as DrawerLayout
-        val navMenu = find(R.id.title_more) as ImageButton
+        val mDrawerLayout = find(cn.com.zzndb.wallpaper.R.id.drawer_layout) as DrawerLayout
+        val navMenu = find(cn.com.zzndb.wallpaper.R.id.title_more) as ImageButton
 //        val navView = find(R.id.nav_view) as NavigationView
-        val titleSearch = find(R.id.title_search) as ImageButton
+        val titleSearch = find(cn.com.zzndb.wallpaper.R.id.title_search) as ImageButton
 
         // fragment manager
         fManager = supportFragmentManager
-        bottomRgGroup = find(R.id.bottom_bar)
+        bottomRgGroup = find(cn.com.zzndb.wallpaper.R.id.bottom_bar)
         bottomRgGroup!!.setOnCheckedChangeListener(this)
 
         // choose ~~bing~~ nasa default (to tmp escape the buggy switch. (( nasa first also buggy after processBar added, so change back
-        bottombing = find(R.id.bottom_bing)
+        bottombing = find(cn.com.zzndb.wallpaper.R.id.bottom_bing)
         bottombing!!.isChecked = true
 
         navMenu.setOnClickListener {    // control drawer bar
@@ -65,6 +72,22 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         }
 
         getScreenSize()
+        val permission = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(this, test.PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE)
+        }
+        doAsync {
+            //DonwloadSaveImg.donwloadImg(presenter.getImageUrl("Bing"))
+            //val bitmap = d(presenter.getImageUrl("Bing"))
+
+            var bitmap =ImageSaveUtils.returnBitMap(presenter.getImageUrl("Bing"))
+            val isSaveSuccess = ImageSaveUtils.saveImageToGallery(bitmap,context)
+            print(isSaveSuccess)
+        }
+
         Log.d("test size get:", getHeight().toString() + "x" + getWidth().toString())
     }
 
@@ -92,36 +115,36 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         val fTransaction : FragmentTransaction = fManager!!.beginTransaction()
         hideAllFragment(fTransaction)
         when(checkedId) {
-            R.id.bottom_bing -> if (bingFg == null) {
+            cn.com.zzndb.wallpaper.R.id.bottom_bing -> if (bingFg == null) {
                 bingFg = ContentFragment()
                 bingFg?.settStr("Bing")
                 Log.d("test mes", "new bingFg")
-                fTransaction.add(R.id.fg_content, bingFg!!)
+                fTransaction.add(cn.com.zzndb.wallpaper.R.id.fg_content, bingFg!!)
             }
             else {
                 fTransaction.show(bingFg!!)
             }
-            R.id.bottom_ng -> if (ngFg == null) {
+            cn.com.zzndb.wallpaper.R.id.bottom_ng -> if (ngFg == null) {
                 ngFg = ContentFragment()
                 ngFg?.settStr("Ng")
                 Log.d("test mes", "new ngFG")
-                fTransaction.add(R.id.fg_content, ngFg!!)
+                fTransaction.add(cn.com.zzndb.wallpaper.R.id.fg_content, ngFg!!)
             } else {
                 fTransaction.show(ngFg!!)
             }
-            R.id.bottom_nasa -> if (nasaFg == null) {
+            cn.com.zzndb.wallpaper.R.id.bottom_nasa -> if (nasaFg == null) {
                 nasaFg = ContentFragment()
                 nasaFg?.settStr("Nasa")
                 Log.d("test mes", "new nasaFg")
-                fTransaction.add(R.id.fg_content, nasaFg!!)
+                fTransaction.add(cn.com.zzndb.wallpaper.R.id.fg_content, nasaFg!!)
             } else {
                 fTransaction.show(nasaFg!!)
             }
-            R.id.bottom_mine ->  {
+            cn.com.zzndb.wallpaper.R.id.bottom_mine ->  {
                 if (mineFg == null) {
                     mineFg = ContentFragment()
                     Log.d("test mes", "new mineFg")
-                    fTransaction.add(R.id.fg_content, mineFg!!)
+                    fTransaction.add(cn.com.zzndb.wallpaper.R.id.fg_content, mineFg!!)
                 } else {
                     fTransaction.show(mineFg!!)
                 }
