@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+            app:key="settings"
+            app:title="Setting">
+
+        <SwitchPreference
+                app:key="saveImage"
+                app:title="Auto Save Image"
+                app:summary="auto save the loading image file to system Picture dir"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            app:key="about"
+            app:title="About">
+
+        <Preference
+                app:key="feedback"
+                app:title="Send feedback"
+                app:summary="Mail report technical issues or suggest new features">
+            <intent android:action="android.intent.action.SENDTO"
+                    android:data="mailto:emricg2@gmail.com?subject=feedback"/>
+        </Preference>
+
+        <Preference app:title="About" >
+            <intent android:action="android.intent.action.VIEW"
+                    android:data="https://zzndb.com.cn/wallpaper.html"/>
+        </Preference>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

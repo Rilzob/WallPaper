@@ -34,6 +34,7 @@ class PresenterImpl(val mView: IView) : IPresenter {
             uiThread {
                 Picasso.get()
                     .load(url)
+                    // there may cause random bug: java.lang.IllegalArgumentException: At least one dimension has to be positive number.
                     .resize(fView.width(), fView.height())
                     .centerCrop()
                     .into(image, object :  Callback {

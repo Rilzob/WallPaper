@@ -3,11 +3,13 @@ package cn.com.zzndb.wallpaper.view
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.NavigationView
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.util.Log
+import android.view.MenuItem
 import android.widget.*
 import cn.com.zzndb.wallpaper.R
 import cn.com.zzndb.wallpaper.presenter.PresenterImpl
@@ -15,14 +17,16 @@ import org.jetbrains.anko.find
 import kotlin.properties.Delegates
 
 
-class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListener{
+class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListener,
+    NavigationView.OnNavigationItemSelectedListener{
 
     // not null delegate, can only use after assign or trow error
     private var sHeight: Int by Delegates.notNull()
     private var sWidth: Int by Delegates.notNull()
 
     private var presenter = PresenterImpl(this)
-    private val mDrawerLayout: DrawerLayout? = null
+    private var mDrawerLayout: DrawerLayout? = null
+    private var navView: NavigationView? = null
 
     private var bottomRgGroup: RadioGroup? = null
     private var bottombing: RadioButton? = null
@@ -42,9 +46,9 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
 
     private fun initView() {
         // init view test
-        val mDrawerLayout = find(R.id.drawer_layout) as DrawerLayout
+        mDrawerLayout = find(R.id.drawer_layout) as DrawerLayout
         val navMenu = find(R.id.title_more) as ImageButton
-//        val navView = find(R.id.nav_view) as NavigationView
+        navView = find(R.id.nav_view) as NavigationView
         val titleSearch = find(R.id.title_search) as ImageButton
 
         // fragment manager
@@ -57,12 +61,16 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         bottombing!!.isChecked = true
 
         navMenu.setOnClickListener {    // control drawer bar
-            mDrawerLayout.openDrawer(GravityCompat.START)
+            mDrawerLayout!!.openDrawer(GravityCompat.START)
         }
 
         titleSearch.setOnClickListener {
             startActivity(Intent(this, search::class.java))
         }
+
+        navView!!.setNavigationItemSelectedListener(this)
+        // this and below the same one use to let the navigation view button restore normal
+        navView!!.menu.getItem(0).isChecked = false
 
         getScreenSize()
         Log.d("test size get:", getHeight().toString() + "x" + getWidth().toString())
@@ -135,5 +143,17 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         if (ngFg   != null)   fragmentTransaction.hide(ngFg!!)
         if (nasaFg != null) fragmentTransaction.hide(nasaFg!!)
         if (mineFg != null) fragmentTransaction.hide(mineFg!!)
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.nav_more -> {
+                // uncheck the item, open setting activity
+                navView!!.menu.getItem(0).isChecked = false
+                startActivity(Intent(this, Setting::class.java))
+            }
+        }
+        mDrawerLayout!!.closeDrawers()
+        return true
     }
 }

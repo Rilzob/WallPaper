@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:background="@color/white"
+              android:padding="9dp"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <ImageButton
+            android:id="@+id/setting_title_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/setting_titlebar_back"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_back"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:background="@color/white"
+            android:contentDescription="@string/setting_titlebar_back"/>
+
+    <TextView
+            android:id="@+id/title_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:paddingStart="26dp"
+            android:paddingEnd="5dp"
+            android:text="@string/setting_titlebar_text"
+            android:textSize="20sp"
+    />
+
+</LinearLayout>
+

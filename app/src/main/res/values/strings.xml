@@ -12,4 +12,6 @@
     <string name="title_activity_search">search</string>
     <string name="auto_update">自动更新壁纸</string>
     <string name="more">更多</string>
+    <string name="setting_titlebar_text">Settings</string>
+    <string name="setting_titlebar_back">Back</string>
 </resources>
