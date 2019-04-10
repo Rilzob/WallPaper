@@ -1,6 +1,7 @@
 package cn.com.zzndb.wallpaper.view
 
 import android.widget.ImageView
+import cn.com.zzndb.wallpaper.presenter.DownloadService
 
 /**
  * all view interface
@@ -10,6 +11,7 @@ interface IView {
     fun getHeight(): Int
     fun getWidth(): Int
     fun showMes(str: String)
+    fun getDBinder(): DownloadService.DownloadBinder?
 }
 
 interface IFragmentView {

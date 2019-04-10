@@ -4,6 +4,7 @@
           package="cn.com.zzndb.wallpaper">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <!-- TODO add backup detail later -->
     <application
@@ -15,6 +16,12 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:usesCleartextTraffic="true"
             tools:ignore="GoogleAppIndexingWarning">
+        <service
+                android:name=".presenter.DownloadService"
+                android:enabled="true"
+                android:exported="true">
+        </service>
+
         <activity android:name=".view.Setting">
         </activity>
         <activity

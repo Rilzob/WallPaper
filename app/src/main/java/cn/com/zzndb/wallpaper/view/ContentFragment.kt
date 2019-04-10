@@ -48,7 +48,7 @@ class ContentFragment : Fragment(), IFragmentView {
         if (tStr !=  "") doAsync {
             mView.showImage(tStr, image, fView)
         }
-        mView.showMes(tStr + " image loading")
+        mView.showMes("$tStr image loading")
         Log.d("test mes", tStr)
     }
 

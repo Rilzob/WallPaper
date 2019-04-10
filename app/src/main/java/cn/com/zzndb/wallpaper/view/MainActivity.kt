@@ -1,8 +1,13 @@
 package cn.com.zzndb.wallpaper.view
 
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
+import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.IBinder
 import android.support.design.widget.NavigationView
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
@@ -12,8 +17,11 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.*
 import cn.com.zzndb.wallpaper.R
+import cn.com.zzndb.wallpaper.presenter.DownloadService
 import cn.com.zzndb.wallpaper.presenter.PresenterImpl
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
+import org.jetbrains.anko.uiThread
 import kotlin.properties.Delegates
 
 
@@ -37,6 +45,16 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
     private var mineFg: MineFragment? = null
 
     private var fManager: FragmentManager? = null
+
+    private var downloadBinder: DownloadService.DownloadBinder? = null
+
+    private var connection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            downloadBinder = service as DownloadService.DownloadBinder
+        }
+        override fun onServiceDisconnected(name: ComponentName?) {
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,10 +92,23 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
 
         getScreenSize()
         Log.d("test size get:", getHeight().toString() + "x" + getWidth().toString())
+
+        // download service related
+        val intent = Intent(this, DownloadService::class.java)
+        startService(intent)
+        bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        // current not need, no external storage access action now
+//        if (ContextCompat.checkSelfPermission(this,
+//                android.Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+//                PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(this, arrayOf(
+//                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+//            ), 1)
+//        }
     }
 
     override fun showImage(str: String ,view: ImageView, fView: ContentFragment) {
-        presenter.loadImage(presenter.getImageUrl(str), view, fView)
+        presenter.downImage(presenter.getImageUrl(str), view, fView)
     }
 
     override fun getHeight(): Int = sHeight
@@ -90,8 +121,17 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         sWidth = context.resources.configuration.screenWidthDp
     }
 
+    // show message in ui thread for other invoke
     override fun showMes(str: String) {
-        Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
+        doAsync {
+            uiThread {
+                Toast.makeText(this@MainActivity, str, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun getDBinder(): DownloadService.DownloadBinder? {
+        return downloadBinder
     }
 
     // like bottom clickListener
@@ -145,6 +185,7 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         if (mineFg != null) fragmentTransaction.hide(mineFg!!)
     }
 
+    // navigation item selected action
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.nav_more -> {
@@ -155,5 +196,23 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         }
         mDrawerLayout!!.closeDrawers()
         return true
+    }
+
+    // running time permission result action
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            1 -> {
+                if (grantResults.isNotEmpty() && grantResults[0] != PackageManager
+                        .PERMISSION_GRANTED) {
+                    Toast.makeText(this@MainActivity, "denied permission",
+                        Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unbindService(connection)
     }
 }
