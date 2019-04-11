@@ -17,6 +17,8 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.*
 import cn.com.zzndb.wallpaper.R
+import cn.com.zzndb.wallpaper.domain.db.PicDb
+import cn.com.zzndb.wallpaper.domain.db.PicDbHelper
 import cn.com.zzndb.wallpaper.presenter.DownloadService
 import cn.com.zzndb.wallpaper.presenter.PresenterImpl
 import org.jetbrains.anko.doAsync
@@ -32,7 +34,7 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
     private var sHeight: Int by Delegates.notNull()
     private var sWidth: Int by Delegates.notNull()
 
-    private var presenter = PresenterImpl(this)
+    private var presenter: PresenterImpl? = null
     private var mDrawerLayout: DrawerLayout? = null
     private var navView: NavigationView? = null
 
@@ -56,6 +58,9 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         }
     }
 
+    private var picDbHelper: PicDbHelper? = null
+    private var picDb: PicDb? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -63,6 +68,10 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
     }
 
     private fun initView() {
+        picDbHelper = PicDbHelper.getInstance(this)
+        picDb = PicDb(picDbHelper!!)
+        presenter = PresenterImpl(this, picDb!!)
+
         // init view test
         mDrawerLayout = find(R.id.drawer_layout) as DrawerLayout
         val navMenu = find(R.id.title_more) as ImageButton
@@ -108,7 +117,7 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
     }
 
     override fun showImage(str: String ,view: ImageView, fView: ContentFragment) {
-        presenter.downImage(presenter.getImageUrl(str), view, fView)
+        presenter!!.downImage(str, view, fView)
     }
 
     override fun getHeight(): Int = sHeight

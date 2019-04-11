@@ -9,8 +9,10 @@ import cn.com.zzndb.wallpaper.view.ContentFragment
 interface IPresenter {
     fun getImageUrl(str: String) : String
     fun loadImage(uri: String, image: ImageView, fView: ContentFragment)
-    fun downImage(url: String, image: ImageView, fView: ContentFragment)
+    fun downImage(str: String, image: ImageView, fView: ContentFragment)
     fun getIName(url: String) : String
+    fun cacheTodayPicInfo(sName: String, fName: String)
+    fun getTodayPic(str: String) : String
 }
 
 interface DownloadListener {

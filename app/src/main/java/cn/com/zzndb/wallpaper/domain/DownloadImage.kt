@@ -20,7 +20,7 @@ class DownloadImage(private val listener: DownloadListener,
     override fun doInBackground(vararg params: String?): Int {
         lateinit var ins: InputStream
         lateinit var savedFile: RandomAccessFile
-        lateinit var file: File
+        val file: File?
         try {
             var downloadLength: Long = 0
             val downloadUrl = params[0]
