@@ -14,6 +14,7 @@ class DownloadService : Service() {
     lateinit var image: ImageView
     lateinit var fView: ContentFragment
     lateinit var cacheUri: String
+    lateinit var sName: String
 
     private var downloadImage: DownloadImage? = null
     private var downloadUrl: String? = null
@@ -26,6 +27,7 @@ class DownloadService : Service() {
 
         override fun onSuccess() {
             downloadImage = null
+            presenter!!.cacheTodayPicInfo(sName, cacheUri)
             presenter!!.loadImage(cacheUri, image, fView)
 //            stopForeground(true)
 //            notificationManager.notify(1, getNotification("Download Success", -1))
@@ -52,13 +54,14 @@ class DownloadService : Service() {
 
     inner class DownloadBinder : Binder() {
 
-        fun startDownload(url: String, presenter: PresenterImpl, image: ImageView, fView: ContentFragment) {
+        fun startDownload(str: String, presenter: PresenterImpl, image: ImageView, fView: ContentFragment) {
             if (downloadImage == null) {
                 this@DownloadService.presenter = presenter
                 this@DownloadService.image = image
                 this@DownloadService.fView = fView
-                downloadUrl = url
-                cacheUri = "$externalCacheDir/" + presenter.getIName(url)
+                this@DownloadService.sName = str
+                downloadUrl = presenter.getImageUrl(str)
+                cacheUri = "$externalCacheDir/" + presenter.getIName(downloadUrl!!)
                 downloadImage = DownloadImage(listener, cacheUri)
                 downloadImage!!.execute(downloadUrl)
 //                startForeground(1, getNotification("Downloading...", 0))
