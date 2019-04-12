@@ -29,7 +29,8 @@
                 android:label="@string/title_activity_search"
                 android:theme="@style/NoActionBar">
         </activity>
-        <activity android:name=".view.MainActivity">
+        <activity android:name=".view.MainActivity"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

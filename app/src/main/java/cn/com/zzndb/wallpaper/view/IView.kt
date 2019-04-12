@@ -8,10 +8,12 @@ import cn.com.zzndb.wallpaper.presenter.DownloadService
  */
 interface IView {
     fun showImage(str: String, view: ImageView, fView: ContentFragment)
+    fun showImage(str: String, view: ImageView, fView: ContentFragment, force: Boolean)
     fun getHeight(): Int
     fun getWidth(): Int
     fun showMes(str: String)
     fun getDBinder(): DownloadService.DownloadBinder?
+    fun forceLoadImage()
 }
 
 interface IFragmentView {
@@ -21,4 +23,6 @@ interface IFragmentView {
     fun showImageVIew()
     fun height(): Int
     fun width(): Int
+    fun gettStr(): String
+    fun getImageView(): ImageView
 }

@@ -72,4 +72,13 @@ class ContentFragment : Fragment(), IFragmentView {
     override fun height(): Int = processBar!!.height
 
     override fun width(): Int = processBar!!.width
+
+    // check current fragment
+    override fun gettStr(): String {
+        return tStr
+    }
+
+    override fun getImageView(): ImageView {
+        return imageView!!
+    }
 }

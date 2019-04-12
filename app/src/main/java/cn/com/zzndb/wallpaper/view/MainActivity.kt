@@ -9,10 +9,12 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
 import android.support.design.widget.NavigationView
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
+import android.support.v4.widget.SwipeRefreshLayout
 import android.util.Log
 import android.view.MenuItem
 import android.widget.*
@@ -24,6 +26,7 @@ import cn.com.zzndb.wallpaper.presenter.PresenterImpl
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
 import org.jetbrains.anko.uiThread
+import java.lang.Exception
 import kotlin.properties.Delegates
 
 
@@ -60,6 +63,8 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
 
     private var picDbHelper: PicDbHelper? = null
     private var picDb: PicDb? = null
+
+    private var swipeRefresh: SwipeRefreshLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,10 +119,19 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
 //                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 //            ), 1)
 //        }
+
+        // swipe refresh related
+        swipeRefresh = find(R.id.swipe_refresh) as SwipeRefreshLayout
+        swipeRefresh!!.setColorSchemeResources(R.color.colorPrimary)
+        swipeRefresh!!.setOnRefreshListener { forceLoadImage() }
     }
 
     override fun showImage(str: String ,view: ImageView, fView: ContentFragment) {
         presenter!!.downImage(str, view, fView)
+    }
+
+    override fun showImage(str: String ,view: ImageView, fView: ContentFragment, force: Boolean) {
+        presenter!!.downImage(str, view, fView, force)
     }
 
     override fun getHeight(): Int = sHeight
@@ -141,6 +155,29 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
 
     override fun getDBinder(): DownloadService.DownloadBinder? {
         return downloadBinder
+    }
+
+    override fun forceLoadImage() {
+        var curF: Fragment? = null
+        val currentFL = fManager!!.fragments
+        for (fragment in currentFL) {
+            if (fragment != null && fragment.userVisibleHint) {
+                curF = try {
+                    fragment as ContentFragment?
+                } catch (e: Exception) {
+                    fragment as MineFragment?
+                }
+            }
+        }
+        if (curF is ContentFragment) {
+            doAsync {
+                presenter!!.downImage(curF.gettStr(), curF.getImageView(), curF, true)
+            }
+        }
+        else {
+            // TODO add for MineFragment
+        }
+        swipeRefresh!!.isRefreshing = false
     }
 
     // like bottom clickListener

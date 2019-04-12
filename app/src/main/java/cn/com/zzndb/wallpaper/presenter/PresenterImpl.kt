@@ -25,7 +25,7 @@ class PresenterImpl(val mView: IView, val picDb: PicDb) : IPresenter {
     // return image url
     override fun getImageUrl(str: String) : String {
         return when(str) {
-            "Bing" -> getBingUrl(mView.getWidth(), mView.getHeight(), mView).url
+            "Bing" -> getBingUrl(mView.getWidth() + 400, mView.getHeight() + 600, mView).url
             "Ng"   -> getNGChinaUrl().url
             "Nasa" -> getNASAUrl().url
             else -> {
@@ -35,7 +35,6 @@ class PresenterImpl(val mView: IView, val picDb: PicDb) : IPresenter {
     }
 
     // download image or load from external storage
-    // TODO fix bing rotate load fit screen image
     override fun downImage(str: String, image: ImageView, fView: ContentFragment) {
         // get today pic uri if exist
         val uri = getTodayPic(str)
@@ -43,8 +42,14 @@ class PresenterImpl(val mView: IView, val picDb: PicDb) : IPresenter {
             loadImage(uri, image, fView)
         }
         else {
-            mView.getDBinder()!!.startDownload(uri, this, image, fView)
+            mView.getDBinder()!!.startDownload(str, this, image, fView)
         }
+    }
+
+    // swipe refresh load image from internet
+    override fun downImage(str: String, image: ImageView, fView: ContentFragment, force: Boolean) {
+        mView.getDBinder()!!.startDownload(str, this, image, fView)
+        mView.showMes("update done!")
     }
 
     // show image
@@ -66,7 +71,6 @@ class PresenterImpl(val mView: IView, val picDb: PicDb) : IPresenter {
                         override fun onSuccess() {
                             fView.showImageVIew()
                             fView.hideProcessBar()
-                            mView.showMes(fView.width().toString() + "+" + fView.height().toString())
                         }
 
                     })
@@ -92,7 +96,7 @@ class PresenterImpl(val mView: IView, val picDb: PicDb) : IPresenter {
     @SuppressLint("SimpleDateFormat")
     override fun cacheTodayPicInfo(sName: String, fName: String) {
         val date = SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time)
-        // save once
+        // save once a pic
         if (!picDb.checkExist(fName)) {
             picDb.saveDailyPicInfo(date, sName, fName)
         }
