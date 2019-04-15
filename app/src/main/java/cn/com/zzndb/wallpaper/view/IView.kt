@@ -1,7 +1,10 @@
 package cn.com.zzndb.wallpaper.view
 
+import android.content.Context
 import android.widget.ImageView
+import androidx.fragment.app.Fragment
 import cn.com.zzndb.wallpaper.presenter.DownloadService
+import cn.com.zzndb.wallpaper.presenter.PresenterImpl
 
 /**
  * all view interface
@@ -14,6 +17,11 @@ interface IView {
     fun showMes(str: String)
     fun getDBinder(): DownloadService.DownloadBinder?
     fun forceLoadImage()
+    fun getPresenter(): PresenterImpl
+    fun getCurrentFrag(): Fragment
+    fun getContext(): Context
+    fun requestWFPermission()
+    fun checkWFPermission(): Boolean
 }
 
 interface IFragmentView {
@@ -25,4 +33,5 @@ interface IFragmentView {
     fun width(): Int
     fun gettStr(): String
     fun getImageView(): ImageView
+    fun imagePreView()
 }

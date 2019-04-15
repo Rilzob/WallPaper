@@ -1,7 +1,15 @@
 package cn.com.zzndb.wallpaper.presenter
 
 import android.annotation.SuppressLint
+import android.app.WallpaperManager
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Bundle
+import android.os.Environment.*
 import android.widget.ImageView
+import androidx.core.content.ContextCompat.startActivity
+import cn.com.zzndb.wallpaper.R
 import cn.com.zzndb.wallpaper.domain.commands.getBingUrl
 import cn.com.zzndb.wallpaper.domain.commands.getNASAUrl
 import cn.com.zzndb.wallpaper.domain.commands.getNGChinaUrl
@@ -12,6 +20,7 @@ import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import java.io.File
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
@@ -42,6 +51,8 @@ class PresenterImpl(val mView: IView, val picDb: PicDb) : IPresenter {
             loadImage(uri, image, fView)
         }
         else {
+            // wait service binding
+            while (mView.getDBinder() == null);
             mView.getDBinder()!!.startDownload(str, this, image, fView)
         }
     }
@@ -87,15 +98,22 @@ class PresenterImpl(val mView: IView, val picDb: PicDb) : IPresenter {
             return result.toString()
         }
         else {
-            mView.showMes("parse url get file name error, save file directly")
-            return url
+            mView.showMes("parse url get file name error, maybe no pic today!\nloading yesterdays pic")
+            return ""
         }
     }
 
-    // save cache info only once a day a image
+    // get date - amount
     @SuppressLint("SimpleDateFormat")
+    private fun getDate(amount: Int) : String {
+        val cal = Calendar.getInstance()
+        cal.add(Calendar.DATE, -amount)
+        return SimpleDateFormat("yyyy-MM-dd").format(cal.time)
+    }
+
+    // save cache info only once a day a image
     override fun cacheTodayPicInfo(sName: String, fName: String) {
-        val date = SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time)
+        val date = getDate(0)
         // save once a pic
         if (!picDb.checkExist(fName)) {
             picDb.saveDailyPicInfo(date, sName, fName)
@@ -105,7 +123,59 @@ class PresenterImpl(val mView: IView, val picDb: PicDb) : IPresenter {
     // return str or uri
     @SuppressLint("SimpleDateFormat")
     override fun getTodayPic(str: String) : String {
-        val date = SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time)
+        val date = getDate(0)
         return picDb.checkTodayPicInfo(date, str)
     }
+
+    // get current showing pic uri
+    override fun getCurrentPic(str: String): String {
+        val date = getDate(0)
+        val bdate = getDate(1)
+        return picDb.getCurrentPicUri(date, str, bdate)
+    }
+
+    override fun sendShareIntent(uri: Uri) {
+        val sendIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_STREAM, uri)
+            type = "image/*"
+        }
+        sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        startActivity(mView.getContext(),
+            Intent.createChooser(sendIntent, mView.getContext().resources.
+                getText(R.string.send_to)), Bundle()
+        )
+    }
+
+    override fun setWallpaper(image: Bitmap) {
+        val mwallpapermanager = WallpaperManager.getInstance(mView.getContext())
+        mwallpapermanager.setBitmap(image)
+    }
+
+    override fun saveImage(uri: String) {
+        if (checkWFPermission()) {
+            val imagePath = File(
+                getExternalStoragePublicDirectory(DIRECTORY_PICTURES)
+                , mView.getContext().resources.getString(R.string.app_name)
+            )
+//            val fileName = File("$imagePath/${uri.substringAfterLast("/")}")
+//            if (!fileName.parentFile.exists()) {
+//                fileName.parentFile.mkdir()
+//            }
+            File(uri.substringBeforeLast("/"), uri.substringAfterLast("/"))
+                .copyTo(File(imagePath, uri.substringAfterLast("/")), true)
+            mView.showMes("Save Image Done!")
+        }
+        else {
+            mView.showMes("Save Failed!\nPermission Denied!")
+        }
+    }
+
+    override fun checkWFPermission(): Boolean {
+        if (!mView.checkWFPermission()) {
+            mView.requestWFPermission()
+        }
+        return mView.checkWFPermission()
+    }
+
 }

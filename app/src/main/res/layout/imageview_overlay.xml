@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:padding="10dp"
+            android:background="@color/semi_transparent"
+            android:id="@+id/Text"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:background="@color/semi_transparent"
+            android:layout_alignParentBottom="true">
+
+
+        <ImageButton
+                android:id="@+id/setWallpaper"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_wallpaper"
+                android:contentDescription="@string/set_as_wallpaper_button"/>
+
+        <ImageButton
+                android:id="@+id/saveImage"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_save"
+                android:contentDescription="@string/save_image_button"/>
+
+        <ImageButton
+                android:id="@+id/shareImage"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_share"
+                android:contentDescription="@string/share_image_button"/>
+
+    </LinearLayout>
+</RelativeLayout>

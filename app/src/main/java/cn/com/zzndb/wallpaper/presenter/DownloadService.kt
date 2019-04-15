@@ -3,6 +3,7 @@ package cn.com.zzndb.wallpaper.presenter
 import android.app.Service
 import android.content.Intent
 import android.os.Binder
+import android.os.Environment
 import android.os.IBinder
 import android.util.Log
 import android.widget.ImageView
@@ -61,7 +62,13 @@ class DownloadService : Service() {
                 this@DownloadService.fView = fView
                 this@DownloadService.sName = str
                 downloadUrl = presenter.getImageUrl(str)
-                cacheUri = "$externalCacheDir/" + presenter.getIName(downloadUrl!!)
+                val fName = presenter.getIName(downloadUrl!!)
+                // try to load Nasa yesterdays image if current web not a image file,
+                // this maybe cause more issue, but who care :(
+                cacheUri = if (fName != "")
+                    "${getExternalFilesDir(Environment.DIRECTORY_PICTURES)}/$fName"
+                else
+                    presenter.getCurrentPic(str) // load from database
                 downloadImage = DownloadImage(listener, cacheUri)
                 downloadImage!!.execute(downloadUrl)
 //                startForeground(1, getNotification("Downloading...", 0))

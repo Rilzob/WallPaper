@@ -63,4 +63,22 @@ class PicDb(private var picDbHelper: PicDbHelper) {
         }
         return existfName
     }
+
+    // today's or yesterday's (for not up in UTC+8 timezone source
+    fun getCurrentPicUri(date: String, str: String, bdate: String) : String {
+        var existfName = checkTodayPicInfo(date, str)
+        if (existfName == str) {
+            // try get yesterday's image uri
+            picDbHelper.use {
+                existfName = try {
+                    select(PicTable.NAME, PicTable.FNAME)
+                        .whereArgs("${PicTable.DATE} like '$bdate' and ${PicTable.SNAME} like '$str'")
+                        .parseOpt(StringParser)!!
+                } catch (e: Exception) {
+                    str
+                }
+            }
+        }
+        return existfName
+    }
 }

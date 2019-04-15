@@ -5,19 +5,21 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
-import android.support.design.widget.NavigationView
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentTransaction
-import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
-import android.support.v4.widget.SwipeRefreshLayout
+import com.google.android.material.navigation.NavigationView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import android.util.Log
 import android.view.MenuItem
 import android.widget.*
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import cn.com.zzndb.wallpaper.R
 import cn.com.zzndb.wallpaper.domain.db.PicDb
 import cn.com.zzndb.wallpaper.domain.db.PicDbHelper
@@ -111,14 +113,6 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         val intent = Intent(this, DownloadService::class.java)
         startService(intent)
         bindService(intent, connection, Context.BIND_AUTO_CREATE)
-        // current not need, no external storage access action now
-//        if (ContextCompat.checkSelfPermission(this,
-//                android.Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-//                PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(this, arrayOf(
-//                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-//            ), 1)
-//        }
 
         // swipe refresh related
         swipeRefresh = find(R.id.swipe_refresh) as SwipeRefreshLayout
@@ -158,6 +152,34 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
     }
 
     override fun forceLoadImage() {
+        val curF = getCurrentFrag()
+        if (curF is ContentFragment) {
+            doAsync {
+                presenter!!.downImage(curF.gettStr(), curF.getImageView(), curF, true)
+            }
+        }
+        else {
+            // TODO add for MineFragment
+        }
+        swipeRefresh!!.isRefreshing = false
+    }
+
+    override fun getPresenter(): PresenterImpl {
+        return presenter!!
+    }
+
+    override fun requestWFPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ), 1)
+        }
+    }
+
+    // asth wrong when a fragment loading switch to another still get the loading one
+    override fun getCurrentFrag(): Fragment {
         var curF: Fragment? = null
         val currentFL = fManager!!.fragments
         for (fragment in currentFL) {
@@ -169,15 +191,16 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
                 }
             }
         }
-        if (curF is ContentFragment) {
-            doAsync {
-                presenter!!.downImage(curF.gettStr(), curF.getImageView(), curF, true)
-            }
-        }
-        else {
-            // TODO add for MineFragment
-        }
-        swipeRefresh!!.isRefreshing = false
+        return curF!!
+    }
+
+    override fun getContext(): Context {
+        return this
+    }
+
+    override fun checkWFPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(this, android.Manifest
+            .permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
     }
 
     // like bottom clickListener

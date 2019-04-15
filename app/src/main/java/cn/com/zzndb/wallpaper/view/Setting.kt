@@ -1,8 +1,8 @@
 package cn.com.zzndb.wallpaper.view
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.preference.PreferenceFragmentCompat
+import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceFragmentCompat
 import android.widget.ImageButton
 import cn.com.zzndb.wallpaper.R
 import org.jetbrains.anko.find

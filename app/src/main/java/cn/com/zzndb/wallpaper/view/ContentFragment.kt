@@ -1,7 +1,7 @@
 package cn.com.zzndb.wallpaper.view
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +9,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import cn.com.zzndb.wallpaper.R
+import cn.com.zzndb.wallpaper.presenter.PresenterImpl
+import com.squareup.picasso.Picasso
+import com.stfalcon.imageviewer.StfalconImageViewer
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
 
@@ -25,6 +28,8 @@ class ContentFragment : Fragment(), IFragmentView {
     private var processBar: ProgressBar? = null
     private var imageView: ImageView? = null
 
+    private var presenter: PresenterImpl? = null
+
     fun settStr(str: String) {
         tStr = str
     }
@@ -35,6 +40,7 @@ class ContentFragment : Fragment(), IFragmentView {
         mView = activity as IView
         processBar = view.find(R.id.imageview_process) as ProgressBar
         imageView = view.find(R.id.imageshow) as ImageView
+        imageView!!.setOnClickListener { imagePreView() }
         return view
     }
 
@@ -80,5 +86,21 @@ class ContentFragment : Fragment(), IFragmentView {
 
     override fun getImageView(): ImageView {
         return imageView!!
+    }
+
+    override fun imagePreView() {
+        // frg may wrong ... not loaded image touch, then choose other fragment
+//        val frg = mView.getCurrentFrag() as ContentFragment
+        // TODO load image if exist not just yesterday
+        presenter = mView.getPresenter()
+        val overlayView = OverlayView(context!!, "Today's ${this.gettStr()} Image")
+        val uris = listOf<String>(
+            presenter!!.getCurrentPic(this.gettStr())
+        )
+        overlayView.update(presenter!!, uris[0])
+        StfalconImageViewer.Builder<String>(context, uris) { imageView, uri ->
+            Picasso.get().load("file://$uri").into(imageView)
+        }.withTransitionFrom(imageView).withOverlayView(overlayView).show()
+
     }
 }

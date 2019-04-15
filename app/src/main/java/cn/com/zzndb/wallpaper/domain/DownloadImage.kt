@@ -25,7 +25,12 @@ class DownloadImage(private val listener: DownloadListener,
             var downloadLength: Long = 0
             val downloadUrl = params[0]
             Log.d("test cachePath", cachePath)
-            // save file to app data cache dir
+            // create '.nomedia' file if no exist
+            val hideFile = File("${cachePath.substringBeforeLast("/")}/.nomedia")
+            if (!hideFile.exists()) {
+                hideFile.createNewFile()
+            }
+            // save file to app data 'file/Pictures' dir
             file = File(cachePath)
             if (file.exists()) {
                 downloadLength = file.length()

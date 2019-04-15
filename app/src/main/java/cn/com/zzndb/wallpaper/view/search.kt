@@ -1,8 +1,8 @@
 package cn.com.zzndb.wallpaper.view
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.SearchView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import cn.com.zzndb.wallpaper.R
 import org.jetbrains.anko.find
 
@@ -15,7 +15,7 @@ class search : AppCompatActivity() {
         initView()
     }
 
-    fun initView() {
+    private fun initView() {
         // focus on search view
         val searchView = find(R.id.search_view) as SearchView
         searchView.onActionViewExpanded()
