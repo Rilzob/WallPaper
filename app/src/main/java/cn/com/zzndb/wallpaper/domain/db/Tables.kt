@@ -9,4 +9,5 @@ object PicTable {
     val DATE = "date"
     val SNAME = "sourceName"
     val FNAME = "fileName"
+    val URL = "url"
 }

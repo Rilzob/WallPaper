@@ -3,6 +3,7 @@ package cn.com.zzndb.wallpaper.view
 import android.content.Context
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import cn.com.zzndb.wallpaper.domain.model.ImageCard
 import cn.com.zzndb.wallpaper.presenter.DownloadService
 import cn.com.zzndb.wallpaper.presenter.PresenterImpl
 
@@ -16,7 +17,7 @@ interface IView {
     fun getWidth(): Int
     fun showMes(str: String)
     fun getDBinder(): DownloadService.DownloadBinder?
-    fun forceLoadImage()
+    fun reloadFragment()
     fun getPresenter(): PresenterImpl
     fun getCurrentFrag(): Fragment
     fun getContext(): Context
@@ -24,7 +25,7 @@ interface IView {
     fun checkWFPermission(): Boolean
 }
 
-interface IFragmentView {
+interface IContentFragmentView {
     fun hideProcessBar()
     fun showProcessBar()
     fun hideImageView()
@@ -34,4 +35,9 @@ interface IFragmentView {
     fun gettStr(): String
     fun getImageView(): ImageView
     fun imagePreView()
+}
+
+interface IMineFragmentView {
+    fun imagePreView(uris: List<String>, tStr: String, image: ImageView, date: String)
+    fun getList() : List<ImageCard>
 }

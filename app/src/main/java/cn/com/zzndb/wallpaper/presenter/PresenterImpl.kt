@@ -14,6 +14,7 @@ import cn.com.zzndb.wallpaper.domain.commands.getBingUrl
 import cn.com.zzndb.wallpaper.domain.commands.getNASAUrl
 import cn.com.zzndb.wallpaper.domain.commands.getNGChinaUrl
 import cn.com.zzndb.wallpaper.domain.db.PicDb
+import cn.com.zzndb.wallpaper.domain.model.ImageCard
 import cn.com.zzndb.wallpaper.view.ContentFragment
 import cn.com.zzndb.wallpaper.view.IView
 import com.squareup.picasso.Callback
@@ -112,11 +113,11 @@ class PresenterImpl(val mView: IView, val picDb: PicDb) : IPresenter {
     }
 
     // save cache info only once a day a image
-    override fun cacheTodayPicInfo(sName: String, fName: String) {
+    override fun cacheTodayPicInfo(sName: String, fName: String, url: String) {
         val date = getDate(0)
         // save once a pic
         if (!picDb.checkExist(fName)) {
-            picDb.saveDailyPicInfo(date, sName, fName)
+            picDb.saveDailyPicInfo(date, sName, fName, url)
         }
     }
 
@@ -176,6 +177,11 @@ class PresenterImpl(val mView: IView, val picDb: PicDb) : IPresenter {
             mView.requestWFPermission()
         }
         return mView.checkWFPermission()
+    }
+
+    override fun getImageCards(): List<ImageCard> {
+        val imageCards = picDb.getDbImageCards(getDate(0))
+        return imageCards
     }
 
 }

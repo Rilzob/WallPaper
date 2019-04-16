@@ -47,7 +47,7 @@ class getBingUrl(sWidth: Int, sHeight: Int, val mView: IView) {
                 return "https://www.bing.com${regex.replace(
                     fJsonStr.images[0].url, reSize
                 )
-                }}"
+                }"
             }
             else {
                 mView.showMes("Error to get fit image size!!")

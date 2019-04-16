@@ -12,7 +12,7 @@ class PicDbHelper private constructor(ctx: Context): ManagedSQLiteOpenHelper(
 
     companion object {
         const val DB_NAME = "pic.db"
-        const val DB_VERSION = 1
+        const val DB_VERSION = 2
         private val instance: PicDbHelper? = null
 
         fun getInstance(ctx: Context) = instance ?: PicDbHelper(ctx)
@@ -23,7 +23,8 @@ class PicDbHelper private constructor(ctx: Context): ManagedSQLiteOpenHelper(
             PicTable.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
             PicTable.DATE to TEXT,
             PicTable.SNAME to TEXT,
-            PicTable.FNAME to TEXT)
+            PicTable.FNAME to TEXT,
+            PicTable.URL to TEXT)
     }
 
     // just simple cache data

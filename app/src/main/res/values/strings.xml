@@ -18,4 +18,5 @@
     <string name="save_image_button">save image button</string>
     <string name="set_as_wallpaper_button">set as wallpaper button</string>
     <string name="send_to">Share Image to ?</string>
+    <string name="card_image">card image</string>
 </resources>

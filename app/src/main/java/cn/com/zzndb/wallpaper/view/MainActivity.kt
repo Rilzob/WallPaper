@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         // swipe refresh related
         swipeRefresh = find(R.id.swipe_refresh) as SwipeRefreshLayout
         swipeRefresh!!.setColorSchemeResources(R.color.colorPrimary)
-        swipeRefresh!!.setOnRefreshListener { forceLoadImage() }
+        swipeRefresh!!.setOnRefreshListener { reloadFragment() }
     }
 
     override fun showImage(str: String ,view: ImageView, fView: ContentFragment) {
@@ -151,7 +151,7 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         return downloadBinder
     }
 
-    override fun forceLoadImage() {
+    override fun reloadFragment() {
         val curF = getCurrentFrag()
         if (curF is ContentFragment) {
             doAsync {
@@ -160,6 +160,7 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         }
         else {
             // TODO add for MineFragment
+            // update the missing image from the app picture dir (
         }
         swipeRefresh!!.isRefreshing = false
     }

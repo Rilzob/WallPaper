@@ -19,7 +19,7 @@ import org.jetbrains.anko.find
 /**
  * Image content fragment
  */
-class ContentFragment : Fragment(), IFragmentView {
+class ContentFragment : Fragment(), IContentFragmentView {
 
     private lateinit var image: ImageView
     private lateinit var mView: IView

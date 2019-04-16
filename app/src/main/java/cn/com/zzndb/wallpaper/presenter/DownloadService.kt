@@ -28,7 +28,7 @@ class DownloadService : Service() {
 
         override fun onSuccess() {
             downloadImage = null
-            presenter!!.cacheTodayPicInfo(sName, cacheUri)
+            presenter!!.cacheTodayPicInfo(sName, cacheUri, downloadUrl!!)
             presenter!!.loadImage(cacheUri, image, fView)
 //            stopForeground(true)
 //            notificationManager.notify(1, getNotification("Download Success", -1))

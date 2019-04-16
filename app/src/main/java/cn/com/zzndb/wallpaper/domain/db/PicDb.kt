@@ -1,11 +1,13 @@
 package cn.com.zzndb.wallpaper.domain.db
 
+import android.provider.ContactsContract
+import cn.com.zzndb.wallpaper.domain.model.ImageCard
 import org.jetbrains.anko.db.*
 import java.lang.Exception
 
 class PicDb(private var picDbHelper: PicDbHelper) {
 
-    fun saveDailyPicInfo(date: String, sName: String, fName: String) {
+    fun saveDailyPicInfo(date: String, sName: String, fName: String, url: String) {
         val test = picDbHelper.use {
             try {
                 // check old uri
@@ -23,13 +25,14 @@ class PicDb(private var picDbHelper: PicDbHelper) {
                     PicTable.NAME,
                     PicTable.DATE to date,
                     PicTable.SNAME to sName,
-                    PicTable.FNAME to fName
+                    PicTable.FNAME to fName,
+                    PicTable.URL to url
                 )
             }
         else {
             // update uri
             picDbHelper.use {
-                update(PicTable.NAME, PicTable.FNAME to fName)
+                update(PicTable.NAME, PicTable.FNAME to fName, PicTable.URL to url)
                     .whereArgs("${PicTable.DATE} like '$date' and " +
                             "${PicTable.SNAME} like '$sName'").exec()
             }
@@ -80,5 +83,13 @@ class PicDb(private var picDbHelper: PicDbHelper) {
             }
         }
         return existfName
+    }
+
+    fun getDbImageCards(date: String): List<ImageCard> {
+        return picDbHelper.use {
+            select(PicTable.NAME, PicTable.FNAME, PicTable.SNAME, PicTable.DATE)
+//                .whereArgs("${PicTable.DATE} like '$date'")
+                .parseList(classParser<ImageCard>())
+        }
     }
 }
