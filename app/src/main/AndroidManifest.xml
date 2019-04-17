@@ -25,6 +25,8 @@
 
         <activity android:name=".view.Setting">
         </activity>
+        <activity android:name=".view.About">
+        </activity>
         <activity
                 android:name=".view.search"
                 android:label="@string/title_activity_search"

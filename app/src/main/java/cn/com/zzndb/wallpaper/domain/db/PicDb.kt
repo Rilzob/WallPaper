@@ -92,4 +92,18 @@ class PicDb(private var picDbHelper: PicDbHelper) {
                 .parseList(classParser<ImageCard>())
         }
     }
+
+    fun getDbtStr(fName: String) : String {
+        return picDbHelper.use {
+            select(PicTable.NAME, PicTable.SNAME)
+                .whereArgs("${PicTable.FNAME} like '$fName'").parseOpt(StringParser)!!
+        }
+    }
+
+    fun getDbDate(fName: String) : String {
+        return picDbHelper.use {
+            select(PicTable.NAME, PicTable.DATE)
+                .whereArgs("${PicTable.FNAME} like '$fName'").parseOpt(StringParser)!!
+        }
+    }
 }

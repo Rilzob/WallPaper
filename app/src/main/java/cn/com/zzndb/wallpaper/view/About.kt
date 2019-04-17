@@ -1,24 +1,24 @@
 package cn.com.zzndb.wallpaper.view
 
 import android.os.Bundle
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
-import android.widget.ImageButton
 import cn.com.zzndb.wallpaper.R
 import kotlinx.android.synthetic.main.nav_in_titlebar.*
 import org.jetbrains.anko.find
 
-class Setting : AppCompatActivity() {
+class About : AppCompatActivity() {
 
     private var back: ImageButton? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nav_in)
-        title_text.text = getText(R.string.setting_titlebar_text)
+        title_text.text = getString(R.string.about_titlebar_text)
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.nav_in_container, SettingFragment())
+            .replace(R.id.nav_in_container, AboutFragment())
             .commit()
         back = find(R.id.title_back) as ImageButton
         back?.setOnClickListener {
@@ -28,8 +28,8 @@ class Setting : AppCompatActivity() {
     }
 }
 
-class SettingFragment : PreferenceFragmentCompat() {
+class AboutFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.setting_prefer, rootKey)
+        setPreferencesFromResource(R.xml.about_prefer, rootKey)
     }
 }

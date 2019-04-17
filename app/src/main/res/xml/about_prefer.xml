@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+            android:key="about"
+            android:title="About">
+
+        <Preference
+                android:key="feedback"
+                android:title="Send feedback"
+                android:summary="Mail report technical issues or suggest new features">
+            <intent android:action="android.intent.action.SENDTO"
+                    android:data="mailto:emricg2@gmail.com?subject='wallpaper feedback'"/>
+        </Preference>
+
+        <Preference android:title="About"
+                    android:summary="a web page about the app">
+            <intent android:action="android.intent.action.VIEW"
+                    android:data="https://zzndb.com.cn/wallpaper.html"/>
+        </Preference>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            android:key="libs"
+            android:title="Used Libs">
+
+        <Preference android:title="Kotlin/anko" >
+            <intent android:action="android.intent.action.VIEW"
+                    android:data="https://github.com/Kotlin/anko"/>
+        </Preference>
+
+        <Preference android:title="google/gson" >
+            <intent android:action="android.intent.action.VIEW"
+                    android:data="https://github.com/google/gson"/>
+        </Preference>
+
+        <Preference android:title="square/picasso" >
+            <intent android:action="android.intent.action.VIEW"
+                    android:data="https://github.com/square/picasso"/>
+        </Preference>
+
+        <Preference android:title="jhy/jsoup" >
+            <intent android:action="android.intent.action.VIEW"
+                    android:data="https://github.com/jhy/jsoup/"/>
+        </Preference>
+
+        <Preference android:title="square/okhttp" >
+            <intent android:action="android.intent.action.VIEW"
+                    android:data="https://github.com/square/okhttp"/>
+        </Preference>
+
+        <Preference android:title="stfalcon-studio/StfalconImageViewer" >
+            <intent android:action="android.intent.action.VIEW"
+                    android:data="https://github.com/stfalcon-studio/StfalconImageViewer"/>
+        </Preference>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

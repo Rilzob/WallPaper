@@ -1,6 +1,7 @@
 package cn.com.zzndb.wallpaper.view
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import cn.com.zzndb.wallpaper.domain.model.ImageCard
@@ -23,6 +24,7 @@ interface IView {
     fun getContext(): Context
     fun requestWFPermission()
     fun checkWFPermission(): Boolean
+    fun getSharedPreference(): SharedPreferences
 }
 
 interface IContentFragmentView {

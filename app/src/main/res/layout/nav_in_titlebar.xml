@@ -6,16 +6,16 @@
               android:layout_height="wrap_content">
 
     <ImageButton
-            android:id="@+id/setting_title_back"
+            android:id="@+id/title_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/setting_titlebar_back"
+            android:text="@string/titlebar_back"
             android:layout_gravity="center"
             android:src="@drawable/ic_back"
             android:scaleX="0.7"
             android:scaleY="0.7"
             android:background="@color/white"
-            android:contentDescription="@string/setting_titlebar_back"/>
+            android:contentDescription="@string/titlebar_back"/>
 
     <TextView
             android:id="@+id/title_text"
@@ -25,7 +25,6 @@
             android:layout_weight="1"
             android:paddingStart="26dp"
             android:paddingEnd="5dp"
-            android:text="@string/setting_titlebar_text"
             android:textSize="20sp"
     />
 

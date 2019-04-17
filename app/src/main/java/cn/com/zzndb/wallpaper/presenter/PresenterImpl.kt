@@ -87,6 +87,9 @@ class PresenterImpl(val mView: IView, val picDb: PicDb) : IPresenter {
 
                     })
             }
+            // check setting whether save image file
+            if (mView.getSharedPreference().getBoolean("saveImage", false))
+                saveImage(uri)
         }
     }
 
@@ -159,13 +162,16 @@ class PresenterImpl(val mView: IView, val picDb: PicDb) : IPresenter {
                 getExternalStoragePublicDirectory(DIRECTORY_PICTURES)
                 , mView.getContext().resources.getString(R.string.app_name)
             )
-//            val fileName = File("$imagePath/${uri.substringAfterLast("/")}")
-//            if (!fileName.parentFile.exists()) {
-//                fileName.parentFile.mkdir()
-//            }
-            File(uri.substringBeforeLast("/"), uri.substringAfterLast("/"))
-                .copyTo(File(imagePath, uri.substringAfterLast("/")), true)
-            mView.showMes("Save Image Done!")
+            val str = dbgettStr(uri)
+            val date = dbgetDate(uri)
+            // save file like 'date_tstr_name'
+            val outFile = File("$imagePath" ,
+                "${date}_${str}_${uri.substringAfterLast("/")}")
+            if (!outFile.exists()) {
+                File(uri.substringBeforeLast("/"), uri.substringAfterLast("/"))
+                    .copyTo(outFile, true)
+                mView.showMes("Save Image Done!")
+            }
         }
         else {
             mView.showMes("Save Failed!\nPermission Denied!")
@@ -182,6 +188,14 @@ class PresenterImpl(val mView: IView, val picDb: PicDb) : IPresenter {
     override fun getImageCards(): List<ImageCard> {
         val imageCards = picDb.getDbImageCards(getDate(0))
         return imageCards
+    }
+
+    override fun dbgettStr(fName: String): String {
+        return picDb.getDbtStr(fName)
+    }
+
+    override fun dbgetDate(fName: String): String {
+        return picDb.getDbDate(fName)
     }
 
 }

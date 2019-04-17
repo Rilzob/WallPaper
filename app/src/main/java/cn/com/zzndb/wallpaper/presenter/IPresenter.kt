@@ -23,6 +23,8 @@ interface IPresenter {
     fun saveImage(uri: String)
     fun checkWFPermission() : Boolean
     fun getImageCards(): List<ImageCard>
+    fun dbgettStr(fName: String): String
+    fun dbgetDate(fName: String): String
 }
 
 interface DownloadListener {

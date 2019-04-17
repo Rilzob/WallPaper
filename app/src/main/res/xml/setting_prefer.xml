@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
-        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+        xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-            app:key="settings"
-            app:title="Setting">
+            android:key="settings"
+            android:title="Setting">
 
         <SwitchPreference
-                app:key="saveImage"
-                app:title="Auto Save Image"
-                app:summary="auto save the loading image file to system Picture dir"/>
+                android:key="saveImage"
+                android:title="Auto Save Image"
+                android:summary="auto save the loading image file to system Picture dir"/>
+
+        <SwitchPreference
+            android:key="autoChangeWallpaper"
+            android:title="Auto Change WallPaper"
+            android:summary="auto change you daily wallpaper use the next Source image" />
+
+        <ListPreference
+            android:key="wallpaperSource"
+            android:title="Source of wallpaper"
+            android:entries="@array/Source"
+            android:entryValues="@array/SourceData"
+            android:defaultValue="0"
+            android:summary="choose the auto change wallpaper source if you set it above, default is Bing" />
+
+        <SwitchPreference
+            android:key="saveOrigin"
+            android:title="Original Picture First"
+            android:summary="load or download original picture first"/>
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-            app:key="about"
-            app:title="About">
-
-        <Preference
-                app:key="feedback"
-                app:title="Send feedback"
-                app:summary="Mail report technical issues or suggest new features">
-            <intent android:action="android.intent.action.SENDTO"
-                    android:data="mailto:emricg2@gmail.com?subject=feedback"/>
-        </Preference>
-
-        <Preference app:title="About" >
-            <intent android:action="android.intent.action.VIEW"
-                    android:data="https://zzndb.com.cn/wallpaper.html"/>
-        </Preference>
-
-    </PreferenceCategory>
 
 </PreferenceScreen>

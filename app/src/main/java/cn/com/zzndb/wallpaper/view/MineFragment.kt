@@ -19,6 +19,7 @@ import org.jetbrains.anko.find
 
 /**
  * mine fragment
+ * show daily cached images
  */
 class MineFragment : Fragment(), IMineFragmentView {
 
@@ -48,10 +49,12 @@ class MineFragment : Fragment(), IMineFragmentView {
 
     }
 
+    // get cached image list from database
     private fun getImageList() {
         imageList = presenter!!.getImageCards()
     }
 
+    // mine fragment imagePreView
     override fun imagePreView(uris: List<String>, tStr: String, image: ImageView, date: String) {
         val overlayView = OverlayView(context!!, "$date's $tStr Image")
         overlayView.update(presenter!!, uris[0])
@@ -61,6 +64,7 @@ class MineFragment : Fragment(), IMineFragmentView {
 
     }
 
+    // for adapter get current image card
     override fun getList() : List<ImageCard> {
         return imageList!!
     }

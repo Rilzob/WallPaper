@@ -4,10 +4,10 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <include layout="@layout/setting_titlebar" />
+    <include layout="@layout/nav_in_titlebar" />
 
     <FrameLayout
-            android:id="@+id/setting_container"
+            android:id="@+id/nav_in_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

@@ -1,13 +1,11 @@
 package cn.com.zzndb.wallpaper.view
 
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
+import android.preference.PreferenceManager
 import com.google.android.material.navigation.NavigationView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -68,6 +66,8 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
 
     private var swipeRefresh: SwipeRefreshLayout? = null
 
+    private var sharedPreferences: SharedPreferences? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -104,7 +104,6 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
 
         navView!!.setNavigationItemSelectedListener(this)
         // this and below the same one use to let the navigation view button restore normal
-        navView!!.menu.getItem(0).isChecked = false
 
         getScreenSize()
         Log.d("test size get:", getHeight().toString() + "x" + getWidth().toString())
@@ -118,6 +117,8 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         swipeRefresh = find(R.id.swipe_refresh) as SwipeRefreshLayout
         swipeRefresh!!.setColorSchemeResources(R.color.colorPrimary)
         swipeRefresh!!.setOnRefreshListener { reloadFragment() }
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
     }
 
     override fun showImage(str: String ,view: ImageView, fView: ContentFragment) {
@@ -161,6 +162,7 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         else {
             // TODO add for MineFragment
             // update the missing image from the app picture dir (
+            // reload missing image not load in mine fragment but in database
         }
         swipeRefresh!!.isRefreshing = false
     }
@@ -179,7 +181,7 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         }
     }
 
-    // asth wrong when a fragment loading switch to another still get the loading one
+    // sth wrong when a fragment loading switch to another still get the loading one
     override fun getCurrentFrag(): Fragment {
         var curF: Fragment? = null
         val currentFL = fManager!!.fragments
@@ -202,6 +204,10 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
     override fun checkWFPermission(): Boolean {
         return ContextCompat.checkSelfPermission(this, android.Manifest
             .permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun getSharedPreference(): SharedPreferences {
+        return sharedPreferences!!
     }
 
     // like bottom clickListener
@@ -258,10 +264,12 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
     // navigation item selected action
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
-            R.id.nav_more -> {
+            R.id.nav_setting -> {
                 // uncheck the item, open setting activity
-                navView!!.menu.getItem(0).isChecked = false
                 startActivity(Intent(this, Setting::class.java))
+            }
+            R.id.nav_more -> {
+                startActivity(Intent(this, About::class.java))
             }
         }
         mDrawerLayout!!.closeDrawers()

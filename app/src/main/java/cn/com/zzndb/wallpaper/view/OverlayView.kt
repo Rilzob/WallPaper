@@ -14,6 +14,9 @@ import cn.com.zzndb.wallpaper.presenter.PresenterImpl
 import kotlinx.android.synthetic.main.imageview_overlay.view.*
 import java.io.File
 
+/**
+ * preview overlay
+ */
 @SuppressLint("ViewConstructor")
 class OverlayView constructor(
     context: Context,

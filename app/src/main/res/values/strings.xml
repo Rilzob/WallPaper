@@ -10,13 +10,15 @@
     <string name="the_image">the_image</string>
     <string name="nav_meun_item_update">auto update</string>
     <string name="title_activity_search">search</string>
-    <string name="auto_update">自动更新壁纸</string>
-    <string name="more">更多</string>
+    <string name="nav_setting">设置</string>
+    <string name="nav_more">关于</string>
     <string name="setting_titlebar_text">Settings</string>
-    <string name="setting_titlebar_back">Back</string>
+    <string name="titlebar_back">Back</string>
     <string name="share_image_button">share image button</string>
     <string name="save_image_button">save image button</string>
     <string name="set_as_wallpaper_button">set as wallpaper button</string>
     <string name="send_to">Share Image to ?</string>
     <string name="card_image">card image</string>
+    <string name="app_icon">App Icon</string>
+    <string name="about_titlebar_text">About</string>
 </resources>

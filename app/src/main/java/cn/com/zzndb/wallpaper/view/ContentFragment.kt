@@ -47,15 +47,12 @@ class ContentFragment : Fragment(), IContentFragmentView {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        Log.d("test mes", "image init" + processBar?.height + "," + processBar?.width)
-
         // load image
         val fView = this
         if (tStr !=  "") doAsync {
             mView.showImage(tStr, image, fView)
         }
         mView.showMes("$tStr image loading")
-        Log.d("test mes", tStr)
     }
 
     override fun hideProcessBar() {

@@ -15,6 +15,9 @@ import com.squareup.picasso.Picasso
 import org.jetbrains.anko.find
 
 
+/**
+ * Mine Fragment Card Adapter
+ */
 class MineCardAdapter(private val mineFragment: MineFragment, private val context: Context, private val imageCards: List<ImageCard>) : RecyclerView.Adapter<MineCardAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
