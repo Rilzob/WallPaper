@@ -1,6 +1,5 @@
 package cn.com.zzndb.wallpaper.view
 
-import android.annotation.SuppressLint
 import android.content.*
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
@@ -27,6 +26,7 @@ import cn.com.zzndb.wallpaper.domain.db.PicDb
 import cn.com.zzndb.wallpaper.domain.db.PicDbHelper
 import cn.com.zzndb.wallpaper.presenter.DownloadService
 import cn.com.zzndb.wallpaper.presenter.PresenterImpl
+import cn.com.zzndb.wallpaper.presenter.WallpaperChange
 import kotlinx.android.synthetic.main.titlebar.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find

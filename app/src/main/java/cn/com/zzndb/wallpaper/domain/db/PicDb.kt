@@ -1,6 +1,5 @@
 package cn.com.zzndb.wallpaper.domain.db
 
-import android.provider.ContactsContract
 import cn.com.zzndb.wallpaper.domain.model.ImageCard
 import org.jetbrains.anko.db.*
 import java.lang.Exception

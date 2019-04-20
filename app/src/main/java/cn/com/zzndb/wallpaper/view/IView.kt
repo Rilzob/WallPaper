@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import cn.com.zzndb.wallpaper.domain.model.ImageCard
 import cn.com.zzndb.wallpaper.presenter.DownloadService
 import cn.com.zzndb.wallpaper.presenter.PresenterImpl
+import cn.com.zzndb.wallpaper.presenter.WallpaperChange
 
 /**
  * all view interface

@@ -1,4 +1,4 @@
-package cn.com.zzndb.wallpaper.view
+package cn.com.zzndb.wallpaper.presenter
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -8,7 +8,6 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import android.util.Log
-import cn.com.zzndb.wallpaper.presenter.PresenterImpl
 import org.jetbrains.anko.doAsync
 import java.util.*
 
@@ -17,8 +16,7 @@ class WallpaperChange: Service() {
     var presenter: PresenterImpl? = null
     var hour: Int = 6
     var min: Int = 0
-    private var alarmMgr: AlarmManager? = null
-    private lateinit var pendingIntent: PendingIntent
+    lateinit var calender: Calendar
 
     var count = 0
 
@@ -27,8 +25,6 @@ class WallpaperChange: Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // check whether from this
-//        if (intent!!.getBooleanExtra("status", false)) {
         // check whether set time
         if ((intent!!.getIntExtra("hour", 25)) == 25) {
             // do not change initial from MainActivity
@@ -50,30 +46,26 @@ class WallpaperChange: Service() {
         // skip first main activity set alarm
         if (!intent.getBooleanExtra("fromMain", false)) {
             // alarm test
-            val calender: Calendar = Calendar.getInstance().apply {
+            calender = Calendar.getInstance().apply {
                 timeInMillis = System.currentTimeMillis()
-                set(Calendar.HOUR_OF_DAY, hour)
                 set(Calendar.MINUTE, min)
+                set(Calendar.HOUR_OF_DAY, hour)
+            }
+            if (intent.getBooleanExtra("status", false)) {
+                calender.add(Calendar.DATE, 1)
             }
             val wcintent = Intent(this, WallpaperChange::class.java)
-//            wcintent.putExtra("status", true)
-            pendingIntent = PendingIntent.getService(this, 1, wcintent, PendingIntent.FLAG_CANCEL_CURRENT)
-            alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            alarmMgr?.setInexactRepeating(
-                AlarmManager.RTC,
+            wcintent.putExtra("status", true)
+            val pendingIntent = PendingIntent.getService(this, 0, wcintent, 0)
+            val alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmMgr.setInexactRepeating(
+                AlarmManager.RTC_WAKEUP,
                 calender.timeInMillis,
                 AlarmManager.INTERVAL_DAY,
                 pendingIntent
             )
         }
-//        }
-//        else Log.d("test service", "not status true")
         return super.onStartCommand(intent, flags, startId)
-//        alarm = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//        val triggerTime = SystemClock.elapsedRealtime() + 5000
-//        val i = Intent(this, WallpaperChange::class.java)
-//        val pendingIntent = PendingIntent.getService(this, 1, i, 0)
-//        alarm!!.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, pendingIntent)
     }
 
     private var mBinder = WallBinder()

@@ -11,6 +11,7 @@ import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
 import cn.com.zzndb.wallpaper.R
+import cn.com.zzndb.wallpaper.presenter.WallpaperChange
 import kotlinx.android.synthetic.main.nav_in_titlebar.*
 import org.jetbrains.anko.find
 import java.util.*
@@ -54,7 +55,6 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
         val upTimeIntent = Intent(activity, WallpaperChange::class.java)
         upTimeIntent.putExtra("hour", hourOfDay)
         upTimeIntent.putExtra("min", minute)
-        upTimeIntent.putExtra("status", true)
         activity!!.startService(upTimeIntent)
     }
 

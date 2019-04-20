@@ -15,8 +15,6 @@ class DownloadImage(private val listener: DownloadListener,
     val TYPE_SUCCESS: Int = 0
     val TYPE_FAILED: Int = 1
 
-    private var lastProgress = 0
-
     override fun doInBackground(vararg params: String?): Int {
         var savedFile: RandomAccessFile? = null
         var ins: InputStream? = null
@@ -59,10 +57,6 @@ class DownloadImage(private val listener: DownloadListener,
                 while (({len = ins.read(b); len}()) != -1) {
                     total += len
                     savedFile.write(b, 0, len)
-                    // caculate the process of downloading
-                    val progress: Int = ((total + downloadLength) * 100 /
-                            contentLength).toInt()
-                    publishProgress(progress)
                 }
                 response.body()?.close()
                 return TYPE_SUCCESS
@@ -78,14 +72,6 @@ class DownloadImage(private val listener: DownloadListener,
             }
         }
         return TYPE_FAILED
-    }
-
-    override fun onProgressUpdate(vararg values: Int?) {
-        val progress: Int = values[0]!!
-        if (progress > lastProgress) {
-            listener.onProgress(progress)
-            lastProgress = progress
-        }
     }
 
     override fun onPostExecute(result: Int?) {
