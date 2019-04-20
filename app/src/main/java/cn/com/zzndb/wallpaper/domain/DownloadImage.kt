@@ -18,8 +18,8 @@ class DownloadImage(private val listener: DownloadListener,
     private var lastProgress = 0
 
     override fun doInBackground(vararg params: String?): Int {
-        lateinit var ins: InputStream
-        lateinit var savedFile: RandomAccessFile
+        var savedFile: RandomAccessFile? = null
+        var ins: InputStream? = null
         val file: File?
         try {
             var downloadLength: Long = 0
@@ -71,8 +71,8 @@ class DownloadImage(private val listener: DownloadListener,
             e.printStackTrace()
         } finally {
             try {
-                ins.close()
-                savedFile.close()
+                ins?.close()
+                savedFile?.close()
             } catch (e: Exception) {
                 e.printStackTrace()
             }

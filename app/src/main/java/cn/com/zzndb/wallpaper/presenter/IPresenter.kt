@@ -12,7 +12,6 @@ import cn.com.zzndb.wallpaper.view.ContentFragment
 interface IPresenter {
     fun getImageUrl(str: String) : String
     fun loadImage(uri: String, image: ImageView, fView: ContentFragment)
-    fun downImage(str: String, image: ImageView, fView: ContentFragment)
     fun downImage(str: String, image: ImageView, fView: ContentFragment, force: Boolean)
     fun getIName(url: String) : String
     fun cacheTodayPicInfo(sName: String, fName: String, url: String)
@@ -25,6 +24,9 @@ interface IPresenter {
     fun getImageCards(): List<ImageCard>
     fun dbgettStr(fName: String): String
     fun dbgetDate(fName: String): String
+    fun changeWallpaper()
+    fun checkNetConnection() : Boolean
+    fun deleteImage(uri: String)
 }
 
 interface DownloadListener {

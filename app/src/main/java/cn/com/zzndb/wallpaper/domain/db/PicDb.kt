@@ -106,4 +106,10 @@ class PicDb(private var picDbHelper: PicDbHelper) {
                 .whereArgs("${PicTable.FNAME} like '$fName'").parseOpt(StringParser)!!
         }
     }
+
+    fun deleteImage(fName: String) {
+        picDbHelper.use {
+            val a = delete(PicTable.NAME, "${PicTable.FNAME} like '$fName'")
+        }
+    }
 }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.WallpaperManager
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment.*
@@ -34,50 +35,76 @@ class PresenterImpl(val mView: IView, val picDb: PicDb) : IPresenter {
 
     // return image url
     override fun getImageUrl(str: String) : String {
-        return when(str) {
-            "Bing" -> getBingUrl(mView.getWidth() + 400, mView.getHeight() + 600, mView).url
-            "Ng"   -> getNGChinaUrl().url
-            "Nasa" -> getNASAUrl().url
-            else -> {
-                "https://zzndb.com.cn/3.png"
+        val sharePreference = mView.getSharedPreference()
+        if (!sharePreference.getBoolean("saveOrigin", false)) {
+            return when (str) {
+                "Bing" -> getBingUrl(mView).url
+                "Ng" -> getNGChinaUrl().url
+                "Nasa" -> getNASAUrl().url
+                else -> {
+                    "https://zzndb.com.cn/3.png"
+                }
+            }
+        }
+        else {
+            return when (str) {
+                "Bing" -> getBingUrl(mView).oriUrl
+                // TODO replace the following oriUrl func
+                "Ng" -> getNGChinaUrl().url
+                "Nasa" -> getNASAUrl().url
+                else -> {
+                    "https://zzndb.com.cn/3.png"
+                }
             }
         }
     }
 
+    // swipe refresh load image from internet
     // download image or load from external storage
-    override fun downImage(str: String, image: ImageView, fView: ContentFragment) {
-        // get today pic uri if exist
-        val uri = getTodayPic(str)
-        if (uri != str) {
-            loadImage(uri, image, fView)
+    override fun downImage(str: String, image: ImageView, fView: ContentFragment, force: Boolean) {
+        if (force) {
+            if (checkNetConnection()) {
+                mView.getDBinder()!!.startDownload(str, this, image, fView)
+                mView.showMes("update done!", 0)
+            }
+            else {
+                fView.hideProcessBar()
+                fView.showImageVIew()
+                mView.showMes("Please check your net connection!", 1)
+            }
         }
         else {
-            // wait service binding
-            while (mView.getDBinder() == null);
-            mView.getDBinder()!!.startDownload(str, this, image, fView)
-        }
-    }
+            // get today pic uri if exist
+            val uri = getTodayPic(str)
+            if (uri != str) {
+                loadImage(uri, image, fView)
+            } else {
+                if (checkNetConnection()) {
+                    // wait service binding
+                    while (mView.getDBinder() == null);
+                    mView.getDBinder()!!.startDownload(str, this, image, fView)
+                }
+                else {
+                    fView.hideProcessBar()
+                    fView.showImageVIew()
+                    mView.showMes("Please check your net connection!", 1)
+                }
 
-    // swipe refresh load image from internet
-    override fun downImage(str: String, image: ImageView, fView: ContentFragment, force: Boolean) {
-        mView.getDBinder()!!.startDownload(str, this, image, fView)
-        mView.showMes("update done!")
+            }
+        }
     }
 
     // show image
     override fun loadImage(uri: String, image: ImageView, fView: ContentFragment) {
-        mView.showMes("try loading image locally")
+//        mView.showMes("try loading image locally")
         doAsync {
             uiThread {
                 Picasso.get()
                     .load("file://$uri")
-                    // there may cause random bug: java.lang.IllegalArgumentException: At least one dimension has to be positive number.
-                    .resize(fView.width(), fView.height())
-                    .centerCrop()
                     .into(image, object : Callback {
                         override fun onError(e: Exception?) {
                             fView.hideProcessBar()
-                            mView.showMes("Picasso loading image failed!")
+                            mView.showMes("Picasso loading image failed!", 1)
                         }
 
                         override fun onSuccess() {
@@ -98,12 +125,12 @@ class PresenterImpl(val mView: IView, val picDb: PicDb) : IPresenter {
         // parse url to get file name or just Name the file cache
         val regex = "[0-9a-zA-Z_?-]*.(jpg|jpeg|png)".toRegex()
         val result = regex.find(url)?.value
-        if (result != null) {
-            return result.toString()
+        return if (result != null) {
+            result.toString()
         }
         else {
-            mView.showMes("parse url get file name error, maybe no pic today!\nloading yesterdays pic")
-            return ""
+            mView.showMes("parse url get file name error, maybe no pic today!\nloading yesterdays pic", 1)
+            ""
         }
     }
 
@@ -170,11 +197,11 @@ class PresenterImpl(val mView: IView, val picDb: PicDb) : IPresenter {
             if (!outFile.exists()) {
                 File(uri.substringBeforeLast("/"), uri.substringAfterLast("/"))
                     .copyTo(outFile, true)
-                mView.showMes("Save Image Done!")
+                mView.showMes("Save Image Done!", 0)
             }
         }
         else {
-            mView.showMes("Save Failed!\nPermission Denied!")
+            mView.showMes("Save Failed!\nPermission Denied!", 1)
         }
     }
 
@@ -185,9 +212,9 @@ class PresenterImpl(val mView: IView, val picDb: PicDb) : IPresenter {
         return mView.checkWFPermission()
     }
 
+    // query database get all image info
     override fun getImageCards(): List<ImageCard> {
-        val imageCards = picDb.getDbImageCards(getDate(0))
-        return imageCards
+        return picDb.getDbImageCards(getDate(0))
     }
 
     override fun dbgettStr(fName: String): String {
@@ -198,4 +225,41 @@ class PresenterImpl(val mView: IView, val picDb: PicDb) : IPresenter {
         return picDb.getDbDate(fName)
     }
 
+    override fun changeWallpaper() {
+        // if exist set or load from net
+        val preference = mView.getSharedPreference()
+        // auto set or not
+        if (preference.getBoolean("autoChange", false)) {
+            var tStr = preference.getString("wallpaperSource", "0")!!
+            // decode from setting preference value
+            if (tStr == "0") tStr = "Bing"
+            if (tStr == "1") tStr = "Ng"
+            if (tStr == "2") tStr = "Nasa"
+            setWallpaper(BitmapFactory.decodeFile(getCurrentPic(tStr)))
+//            val uri = getTodayPic(tStr)
+//            if (uri != tStr)
+//                setWallpaper(BitmapFactory.decodeFile(uri))
+//            else {
+//                if (checkNetConnection()) {
+//                    // try loading new image
+//                    mView.getDBinder()!!.cacheImageOnly(tStr, this)
+//                }
+//                mView.showMes("Please check your network!")
+//            }
+        }
+    }
+
+    // because of problem, move to MainActivity
+    override fun checkNetConnection(): Boolean {
+        return mView.checkNetConnection()
+    }
+
+    // delete image from database & local cache
+    override fun deleteImage(uri: String) {
+        mView.showMes("delete done!", 0)
+        picDb.deleteImage(uri)
+        val file = File(uri)
+        if (file.exists())
+            file.delete()
+    }
 }

@@ -1,11 +1,15 @@
 package cn.com.zzndb.wallpaper.view
 
+import android.annotation.SuppressLint
 import android.content.*
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
 import android.preference.PreferenceManager
+import android.util.DisplayMetrics
 import com.google.android.material.navigation.NavigationView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -23,6 +27,7 @@ import cn.com.zzndb.wallpaper.domain.db.PicDb
 import cn.com.zzndb.wallpaper.domain.db.PicDbHelper
 import cn.com.zzndb.wallpaper.presenter.DownloadService
 import cn.com.zzndb.wallpaper.presenter.PresenterImpl
+import kotlinx.android.synthetic.main.titlebar.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
 import org.jetbrains.anko.uiThread
@@ -56,6 +61,16 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
     private var connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             downloadBinder = service as DownloadService.DownloadBinder
+        }
+        override fun onServiceDisconnected(name: ComponentName?) {
+        }
+    }
+
+    private var wallChangeBinder: WallpaperChange.WallBinder? = null
+
+    private var wcconnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            wallChangeBinder = service as WallpaperChange.WallBinder
         }
         override fun onServiceDisconnected(name: ComponentName?) {
         }
@@ -119,10 +134,16 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         swipeRefresh!!.setOnRefreshListener { reloadFragment() }
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-    }
 
-    override fun showImage(str: String ,view: ImageView, fView: ContentFragment) {
-        presenter!!.downImage(str, view, fView)
+        val wintent = Intent(this, WallpaperChange::class.java)
+//        wintent.putExtra("status", true)
+        wintent.putExtra("fromMain", true)
+        startService(wintent)
+        bindService(wintent, wcconnection, Context.BIND_AUTO_CREATE)
+        doAsync {
+            while (wallChangeBinder == null);
+            wallChangeBinder!!.argSet(getPresenter())
+        }
     }
 
     override fun showImage(str: String ,view: ImageView, fView: ContentFragment, force: Boolean) {
@@ -135,15 +156,17 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
 
     private fun getScreenSize() {
         val context = this.applicationContext
-        sHeight = context.resources.configuration.screenHeightDp
-        sWidth = context.resources.configuration.screenWidthDp
+        val dp2pixelFactor = context.resources.displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT
+        sHeight = context.resources.configuration.screenHeightDp * dp2pixelFactor
+        sWidth = context.resources.configuration.screenWidthDp * dp2pixelFactor
     }
 
     // show message in ui thread for other invoke
-    override fun showMes(str: String) {
+    // short 0 ,long 1
+    override fun showMes(str: String, length: Int) {
         doAsync {
             uiThread {
-                Toast.makeText(this@MainActivity, str, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, str, length).show()
             }
         }
     }
@@ -163,6 +186,7 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
             // TODO add for MineFragment
             // update the missing image from the app picture dir (
             // reload missing image not load in mine fragment but in database
+            mineFg!!.updateMineFragment()
         }
         swipeRefresh!!.isRefreshing = false
     }
@@ -186,7 +210,7 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         var curF: Fragment? = null
         val currentFL = fManager!!.fragments
         for (fragment in currentFL) {
-            if (fragment != null && fragment.userVisibleHint) {
+            if (fragment != null && fragment.isVisible) {
                 curF = try {
                     fragment as ContentFragment?
                 } catch (e: Exception) {
@@ -210,6 +234,10 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         return sharedPreferences!!
     }
 
+    override fun getWBinder(): WallpaperChange.WallBinder? {
+        return wallChangeBinder
+    }
+
     // like bottom clickListener
     override fun onCheckedChanged(group: RadioGroup?, checkedId: Int) {
         val fTransaction : FragmentTransaction = fManager!!.beginTransaction()
@@ -217,36 +245,44 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         when(checkedId) {
             R.id.bottom_bing -> if (bingFg == null) {
                 bingFg = ContentFragment()
-                bingFg?.settStr("Bing")
+                bingFg?.settStr(getString(R.string.bing))
                 Log.d("test mes", "new bingFg")
                 fTransaction.add(R.id.fg_content, bingFg!!)
+                title_text.text = getString(R.string.bing)
             }
             else {
                 fTransaction.show(bingFg!!)
+                title_text.text = getString(R.string.bing)
             }
             R.id.bottom_ng -> if (ngFg == null) {
                 ngFg = ContentFragment()
-                ngFg?.settStr("Ng")
+                ngFg?.settStr(getString(R.string.ng))
                 Log.d("test mes", "new ngFG")
                 fTransaction.add(R.id.fg_content, ngFg!!)
+                title_text.text = getString(R.string.ng)
             } else {
                 fTransaction.show(ngFg!!)
+                title_text.text = getString(R.string.ng)
             }
             R.id.bottom_nasa -> if (nasaFg == null) {
                 nasaFg = ContentFragment()
-                nasaFg?.settStr("Nasa")
+                nasaFg?.settStr(getString(R.string.nasa))
                 Log.d("test mes", "new nasaFg")
                 fTransaction.add(R.id.fg_content, nasaFg!!)
+                title_text.text = getString(R.string.nasa)
             } else {
                 fTransaction.show(nasaFg!!)
+                title_text.text = getString(R.string.nasa)
             }
             R.id.bottom_mine ->  {
                 if (mineFg == null) {
                     mineFg = MineFragment()
                     Log.d("test mes", "new mineFg")
                     fTransaction.add(R.id.fg_content, mineFg!!)
+                    title_text.text = getString(R.string.user)
                 } else {
                     fTransaction.show(mineFg!!)
+                    title_text.text = getString(R.string.user)
                 }
             }
         }
@@ -289,8 +325,15 @@ class MainActivity : AppCompatActivity(), IView, RadioGroup.OnCheckedChangeListe
         }
     }
 
+    override fun checkNetConnection(): Boolean {
+        val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo: NetworkInfo? = connMgr.activeNetworkInfo
+        return networkInfo?.isConnected == true
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         unbindService(connection)
+        unbindService(wcconnection)
     }
 }

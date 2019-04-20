@@ -3,11 +3,11 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="cn.com.zzndb.wallpaper">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.SET_WALLPAPER"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-    <!-- TODO add backup detail later -->
     <application
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
@@ -22,6 +22,11 @@
                 android:enabled="true"
                 android:exported="true">
         </service>
+        <service
+                android:name=".view.WallpaperChange"
+                android:enabled="true"
+                android:exported="true">
+        </service>
 
         <activity android:name=".view.Setting">
         </activity>
@@ -32,9 +37,10 @@
                 android:label="@string/title_activity_search"
                 android:theme="@style/NoActionBar">
         </activity>
-        <activity android:name=".view.MainActivity"
-                  android:theme="@style/StatusBarTheme"
-                  android:screenOrientation="portrait">
+        <activity
+                android:name=".view.MainActivity"
+                android:screenOrientation="portrait"
+                android:theme="@style/StatusBarTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -42,13 +48,13 @@
             </intent-filter>
         </activity>
         <provider
-                android:authorities="cn.com.zzndb.wallpaper.provider"
                 android:name="androidx.core.content.FileProvider"
+                android:authorities="cn.com.zzndb.wallpaper.provider"
                 android:exported="false"
                 android:grantUriPermissions="true">
             <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/file_paths"/>
         </provider>
     </application>
 

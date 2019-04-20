@@ -3,33 +3,43 @@
         xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-            android:key="settings"
-            android:title="Setting">
+            android:key="image settings"
+            android:title="@string/image_setting">
 
         <SwitchPreference
                 android:key="saveImage"
-                android:title="Auto Save Image"
+                android:title="@string/auto_save_image"
                 android:summary="auto save the loading image file to system Picture dir"/>
 
         <SwitchPreference
-            android:key="autoChangeWallpaper"
-            android:title="Auto Change WallPaper"
+                android:key="saveOrigin"
+                android:title="@string/orignal_pic_first"
+                android:summary="load or download original picture first \nNote that the original picture are huge, may not fit phone screen"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            android:key="wallPaper setting"
+            android:title="@string/wallpaper_setting">
+
+        <SwitchPreference
+            android:key="autoChange"
+            android:title="@string/auto_change_wallpaper"
             android:summary="auto change you daily wallpaper use the next Source image" />
 
         <ListPreference
             android:key="wallpaperSource"
-            android:title="Source of wallpaper"
+            android:title="@string/source_of_wallpaper"
             android:entries="@array/Source"
             android:entryValues="@array/SourceData"
             android:defaultValue="0"
             android:summary="choose the auto change wallpaper source if you set it above, default is Bing" />
 
-        <SwitchPreference
-            android:key="saveOrigin"
-            android:title="Original Picture First"
-            android:summary="load or download original picture first"/>
+        <Preference
+            android:key="upTimeSet"
+            android:title="@string/set_auto_up_time"
+            android:summary="set the wallpaper update time if you choose 'Auto Change WallPaper' above" />
 
     </PreferenceCategory>
-
 
 </PreferenceScreen>

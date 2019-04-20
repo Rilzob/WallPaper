@@ -2,7 +2,6 @@ package cn.com.zzndb.wallpaper.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +13,8 @@ import com.squareup.picasso.Picasso
 import com.stfalcon.imageviewer.StfalconImageViewer
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
+
+
 
 
 /**
@@ -30,12 +31,23 @@ class ContentFragment : Fragment(), IContentFragmentView {
 
     private var presenter: PresenterImpl? = null
 
+//    private var height: Int = 0
+//    private var width: Int = 0
+
     fun settStr(str: String) {
         tStr = str
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.frgment_view, container, false) as View
+        val view = inflater.inflate(R.layout.fragment_view, container, false) as View
+        // get fragment h&w from its layout
+//        val myLayout = view.findViewById(R.id.fragment_layout) as RelativeLayout
+//        myLayout.viewTreeObserver.addOnGlobalLayoutListener{
+//            if (height == 0 || width == 0) {
+//                height = myLayout.height
+//                width = myLayout.width
+//            }
+//        }
         image = view.find(R.id.imageshow)
         mView = activity as IView
         processBar = view.find(R.id.imageview_process) as ProgressBar
@@ -50,9 +62,9 @@ class ContentFragment : Fragment(), IContentFragmentView {
         // load image
         val fView = this
         if (tStr !=  "") doAsync {
-            mView.showImage(tStr, image, fView)
+            mView.showImage(tStr, image, fView, false)
         }
-        mView.showMes("$tStr image loading")
+//        mView.showMes("$tStr image loading", 0)
     }
 
     override fun hideProcessBar() {
@@ -71,10 +83,13 @@ class ContentFragment : Fragment(), IContentFragmentView {
         imageView!!.visibility = View.VISIBLE
     }
 
-    // tmp get imageView size from full size processBar :)
-    override fun height(): Int = processBar!!.height
-
-    override fun width(): Int = processBar!!.width
+//    // tmp get imageView size from full size processBar :)
+//    override fun height(): Int {
+//        Log.d("test fragmentSize", "$height x $width")
+//        return this.height
+//    }
+//
+//    override fun width(): Int = this.width
 
     // check current fragment
     override fun gettStr(): String {

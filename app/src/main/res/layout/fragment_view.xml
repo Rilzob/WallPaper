@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+        android:id="@+id/fragment_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -10,7 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/grey"
-            android:scaleType="fitCenter"
+            android:scaleType="centerCrop"
             android:visibility="gone"
             android:contentDescription="@string/the_image"/>
 

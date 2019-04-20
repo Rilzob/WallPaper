@@ -1,5 +1,6 @@
 package cn.com.zzndb.wallpaper.view.adpater
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +19,7 @@ import org.jetbrains.anko.find
 /**
  * Mine Fragment Card Adapter
  */
-class MineCardAdapter(private val mineFragment: MineFragment, private val context: Context, private val imageCards: List<ImageCard>) : RecyclerView.Adapter<MineCardAdapter.ViewHolder>() {
+class MineCardAdapter(private val mineFragment: MineFragment, private val context: Context, private var imageCards: List<ImageCard>) : RecyclerView.Adapter<MineCardAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
@@ -31,7 +32,7 @@ class MineCardAdapter(private val mineFragment: MineFragment, private val contex
             cardView = view as CardView
             imageView = view.find(R.id.card_image)
 //            headText = view.find(R.id.card_head)
-            imageText = view.find(R.id.card_sname)
+            imageText =  view.find(R.id.card_sname)
         }
     }
 
@@ -47,14 +48,24 @@ class MineCardAdapter(private val mineFragment: MineFragment, private val contex
             val imageCard = mineFragment.getList()[position]
             mineFragment.imagePreView(listOf(imageCard.uri), imageCard.sName, holder.imageView!!, imageCard.date)
         }
+        holder.imageView!!.setOnLongClickListener {
+            val position = holder.adapterPosition
+            mineFragment.deleteImage(imageCards[position].uri, position)
+            true
+        }
         return holder
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val imageCard = imageCards[position]
-        holder.imageText!!.text = imageCard.sName
+        holder.imageText!!.text = imageCard.date + " " + imageCard.sName
 //        holder.headText!!.text = imageCard.headDate
         Picasso.get().load("file://${imageCard.uri}").into(holder.imageView)
+    }
+
+    fun updateItem(imageCards: List<ImageCard>) {
+        this.imageCards = imageCards
     }
 }
 

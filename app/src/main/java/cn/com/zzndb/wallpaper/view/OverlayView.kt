@@ -36,7 +36,7 @@ class OverlayView constructor(
         setWallpaper.setOnClickListener {
             val image = BitmapFactory.decodeFile(uri)
             presenter.setWallpaper(image)
-            presenter.mView.showMes("wallpaper set done!")
+            presenter.mView.showMes("wallpaper set done!", 0)
         }
 
         shareImage.setOnClickListener {

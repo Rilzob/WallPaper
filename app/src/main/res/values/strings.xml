@@ -1,12 +1,13 @@
 <resources>
     <string name="app_name">wallpaper</string>
+    <string name="app_name_version">wallpaper 0.6</string>
     <string name="titlebar_more">more</string>
     <string name="titlebar_text">A WallPic</string>
     <string name="titlebar_search">Search</string>
     <string name="bing">Bing</string>
     <string name="ng">Ng</string>
     <string name="nasa">Nasa</string>
-    <string name="user">mine</string>
+    <string name="user">Mine</string>
     <string name="the_image">the_image</string>
     <string name="nav_meun_item_update">auto update</string>
     <string name="title_activity_search">search</string>
@@ -21,4 +22,16 @@
     <string name="card_image">card image</string>
     <string name="app_icon">App Icon</string>
     <string name="about_titlebar_text">About</string>
+    <string name="minefrg_dialog_message">Will delete the image from app local cache and database.</string>
+    <string name="minefrg_dialog_title">Delete the image?</string>
+    <string name="minefrg_dialog_ok">OK</string>
+    <string name="minefrg_dialog_cancel">Cancel</string>
+    <string name="setwallpaper_shortcut_Bing">Bing</string>
+    <string name="image_setting">Image Setting</string>
+    <string name="auto_save_image">Auto Save Image</string>
+    <string name="orignal_pic_first">Original Picture First</string>
+    <string name="wallpaper_setting">WallPaper Setting</string>
+    <string name="auto_change_wallpaper">Auto Change WallPaper</string>
+    <string name="source_of_wallpaper">Source of wallpaper</string>
+    <string name="set_auto_up_time">Set update time</string>
 </resources>

@@ -12,11 +12,10 @@ import cn.com.zzndb.wallpaper.presenter.PresenterImpl
  * all view interface
  */
 interface IView {
-    fun showImage(str: String, view: ImageView, fView: ContentFragment)
     fun showImage(str: String, view: ImageView, fView: ContentFragment, force: Boolean)
     fun getHeight(): Int
     fun getWidth(): Int
-    fun showMes(str: String)
+    fun showMes(str: String, length: Int)
     fun getDBinder(): DownloadService.DownloadBinder?
     fun reloadFragment()
     fun getPresenter(): PresenterImpl
@@ -25,6 +24,8 @@ interface IView {
     fun requestWFPermission()
     fun checkWFPermission(): Boolean
     fun getSharedPreference(): SharedPreferences
+    fun getWBinder(): WallpaperChange.WallBinder?
+    fun checkNetConnection() : Boolean
 }
 
 interface IContentFragmentView {
@@ -32,8 +33,6 @@ interface IContentFragmentView {
     fun showProcessBar()
     fun hideImageView()
     fun showImageVIew()
-    fun height(): Int
-    fun width(): Int
     fun gettStr(): String
     fun getImageView(): ImageView
     fun imagePreView()
@@ -42,4 +41,6 @@ interface IContentFragmentView {
 interface IMineFragmentView {
     fun imagePreView(uris: List<String>, tStr: String, image: ImageView, date: String)
     fun getList() : List<ImageCard>
+    fun updateMineFragment()
+    fun deleteImage(uri: String, postion: Int)
 }
