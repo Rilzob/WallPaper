@@ -51,7 +51,9 @@ class WallpaperChange: Service() {
                 set(Calendar.MINUTE, min)
                 set(Calendar.HOUR_OF_DAY, hour)
             }
-            if (intent.getBooleanExtra("status", false)) {
+            val current = Calendar.getInstance().apply { timeInMillis = System.currentTimeMillis() }
+            if (intent.getBooleanExtra("status", false)
+                || current.timeInMillis > calender.timeInMillis) {
                 calender.add(Calendar.DATE, 1)
             }
             val wcintent = Intent(this, WallpaperChange::class.java)
