@@ -8,21 +8,17 @@
 
 ## Functions
 
-* Download image from above site
-* Set them as a wallpaper
+* Download image from above site (devices Picture directory)
+* Set them as a wallpaper (directly now)
 * Share them to other app
 * Try auto change your wallpaper (keep the app running needed)
+* ~~Search~~ (not implement yet)
 
 ## Screenshots
 
-![](app/screenshots/1.png)
-![](app/screenshots/2.png)
-![](app/screenshots/3.png)
-![](app/screenshots/4.png)
-![](app/screenshots/5.png)
-![](app/screenshots/6.png)
-![](app/screenshots/7.png)
-![](app/screenshots/8.png)
+![three source](app/screenshots/r1.jpg)
+![mine & imagePreview](app/screenshots/r2.jpg)
+![navBar & setting & about](app/screenshots/r3.jpg)
 
 ## License
 
